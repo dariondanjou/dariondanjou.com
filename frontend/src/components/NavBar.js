@@ -1,0 +1,175 @@
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "../App.css";
+
+const logoMain = process.env.REACT_APP_LOGO_MAIN;
+const logoCategories = process.env.REACT_APP_LOGO_CATEGORIES;
+const iconContact = process.env.REACT_APP_ICON_CONTACT;
+const iconYouTube = process.env.REACT_APP_ICON_YOUTUBE;
+const iconInstagram = process.env.REACT_APP_ICON_INSTAGRAM;
+const iconTikTok = process.env.REACT_APP_ICON_TIKTOK;
+const iconX = process.env.REACT_APP_ICON_X;
+const iconTwitch = process.env.REACT_APP_ICON_TWITCH;
+const iconLinkedIn = process.env.REACT_APP_ICON_LINKEDIN;
+const iconDiscord = process.env.REACT_APP_ICON_DISCORD;
+const iconWhatsapp = process.env.REACT_APP_ICON_WHATSAPP;
+const iconShare = process.env.REACT_APP_ICON_SHARE;
+
+function NavBar({ expandedImage }) {
+    const [expanded, setExpanded] = useState(false);
+    const [expandedType, setExpandedType] = useState(null);
+    const [email, setEmail] = useState("");
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const toggleExpand = (type) => {
+        if (location.pathname === "/contact") return;
+    
+        if (expanded && expandedType === type) {
+            // If the same type is clicked, collapse smoothly
+            document.querySelector(".expanded-navbar").classList.add("collapsing");
+            
+            setTimeout(() => {
+                setExpanded(false);
+                setExpandedType(null);
+                document.querySelector(".expanded-navbar").classList.remove("collapsing");
+            }, 300); // Matches CSS transition time
+        } else {
+            // If switching between expanded sections, collapse smoothly first
+            document.querySelector(".expanded-navbar").classList.add("collapsing");
+            
+            setTimeout(() => {
+                setExpanded(false);
+                setExpandedType(null);
+    
+                setTimeout(() => {
+                    setExpanded(true);
+                    setExpandedType(type);
+                }, 50); // Small delay to prevent instant jump
+            }, 300); // Collapse before expanding new section
+        }
+    };
+    
+
+    const handleEmailSubmit = async () => {
+        if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+    
+        try {
+            const response = await fetch("http://localhost:5000/api/subscribe", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+    
+            if (response.ok) {
+                alert("You have been subscribed successfully!");
+                setEmail("");
+                setExpanded(false);
+            } else {
+                alert("Failed to subscribe. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error submitting email:", error);
+            alert("An error occurred. Please try again.");
+        }
+    };
+    
+    
+
+    return (
+        <>
+            <div className={`expanded-navbar ${expanded ? "expanded" : ""} ${expandedType === "email" ? "email-expanded" : ""} ${expandedType === "share" ? "sharing-expanded" : ""}`}>
+                <div className="expanded-content">
+                    {expandedType === "email" ? (
+                        <div className="email-container">
+                            <div className="email-input-container">
+                                <input
+                                    type="email"
+                                    className="email-input"
+                                    placeholder="enter your email to stay updated!"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                                <button className="email-submit" onClick={handleEmailSubmit}>➝</button>
+                            </div>
+                        </div>
+                    ) : expandedType === "share" ? (
+                        <div className="share-options">
+                            <span className="share-label">share to: </span>
+                            <a href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`} target="_blank" rel="noopener noreferrer"> Facebook </a>
+                            <a href={`https://twitter.com/intent/tweet?url=${window.location.href}`} target="_blank" rel="noopener noreferrer"> Twitter </a>
+                            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}`} target="_blank" rel="noopener noreferrer"> LinkedIn </a>
+                            <a href={`https://api.whatsapp.com/send?text=${window.location.href}`} target="_blank" rel="noopener noreferrer"> WhatsApp </a>
+                            <a href={`mailto:?subject=Check this out&body=${window.location.href}`} target="_blank" rel="noopener noreferrer"> Email </a>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="about-container">
+                                <p className="about-text">
+                                    darion d’anjou is an ai powered creative studio that leverages the latest in technology to deliver best of class creative and technology solutions
+                                </p>
+                            </div>
+                            <div className="button-container">
+                                <button className="contact-button" onClick={() => navigate("/contact")}>
+                                    let’s work together! ➝
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
+
+            <nav className={`navbar ${expandedImage ? "expanded" : ""}`}>
+                <div className="nav-left">
+                    <a href="#" role="button" onClick={(e) => { e.preventDefault(); toggleExpand("about"); }}>
+                        <img src={logoMain} alt="Darion D'Anjou | Creativity x Technology" className="nav-logo" />
+                    </a>
+                </div>
+
+                <div className="nav-center">
+                    <img src={logoCategories} alt="Still | Moving | Interactive" className="nav-categories" />
+                </div>
+
+                <div className="nav-right">
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a href="#" role="button" tabIndex="0" onClick={(e) => { e.preventDefault(); toggleExpand("email"); }}>
+                        <img src={iconContact} alt="Sign up for updates" className="nav-icon" />
+                    </a>
+                    <a href="https://www.youtube.com/dariondanjou" target="_blank" rel="noopener noreferrer">
+                        <img src={iconYouTube} alt="YouTube" className="nav-icon" />
+                    </a>
+                    <a href="https://instagram.com/dariondanjou" target="_blank" rel="noopener noreferrer">
+                        <img src={iconInstagram} alt="Instagram" className="nav-icon" />
+                    </a>
+                    <a href="https://www.tiktok.com/dariondanjou" target="_blank" rel="noopener noreferrer">
+                        <img src={iconTikTok} alt="TikTok" className="nav-icon" />
+                    </a>
+                    <a href="https://x.com/dariondanjou" target="_blank" rel="noopener noreferrer">
+                        <img src={iconX} alt="X" className="nav-icon" />
+                    </a>
+                    <a href="https://www.twitch.tv/dariondanjou" target="_blank" rel="noopener noreferrer">
+                        <img src={iconTwitch} alt="Twitch" className="nav-icon" />
+                    </a>
+                    <a href="https://www.linkedin.com/in/darion-d-anjou-39a3a926/" target="_blank" rel="noopener noreferrer">
+                        <img src={iconLinkedIn} alt="LinkedIn" className="nav-icon" />
+                    </a>
+                    <a href="https://discord.gg/ejEBJss8gM" target="_blank" rel="noopener noreferrer">
+                        <img src={iconDiscord} alt="Discord" className="nav-icon" />
+                    </a>
+                    <a href="https://wa.me/your-whatsapp-number" target="_blank" rel="noopener noreferrer">
+                        <img src={iconWhatsapp} alt="WhatsApp" className="nav-icon" />
+                    </a>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                    <a href="#" role="button" tabIndex="0" onClick={(e) => { e.preventDefault(); toggleExpand("share"); }}>
+                        <img src={iconShare} alt="Share" className="nav-icon" />
+                    </a>
+                </div>
+            </nav>
+        </>
+    );
+}
+
+export default NavBar;

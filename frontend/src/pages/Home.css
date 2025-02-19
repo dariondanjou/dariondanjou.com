@@ -1,0 +1,96 @@
+.page-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative;
+    top: 0;
+}
+
+
+/* Fullscreen Scrollable Container */
+.gallery-container {
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto; /* Enables scrolling */
+    scroll-behavior: smooth;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Hide Scrollbars */
+.gallery-container::-webkit-scrollbar {
+    display: none;
+}
+.gallery-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Image Grid */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Ensures exactly 3 images per row */
+    width: 100vw;
+    align-items: center;
+}
+
+/* Image Wrapper */
+.image-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Maintain aspect ratio and fill width */
+.portfolio-image {
+    width: 100%; /* Ensures images scale within their grid cell */
+    height: auto;
+    object-fit: cover;
+}
+
+/* ✅ Fullscreen Image Mode */
+.fullscreen-image-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Change from flex-start to center */
+    align-items: center;
+    z-index: 999;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.fullscreen-image {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover; /* Ensures no margin/gaps */
+    margin-top: -192px;
+}
+
+
+
+.fullscreen-info {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.3); /* 70% opacity */
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+    margin-top: -75px; /* Moves text closer to the image */
+    padding-bottom: 20px; /* Ensures spacing from navbar */
+}
+
+
+.navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: black; /* Ensure visibility */
+    z-index: 1000; /* Keep above expanded image */
+}

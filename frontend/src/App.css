@@ -1,0 +1,469 @@
+/* ✅ Full Page Layout */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+
+html, body {
+  background-color: black;
+  color: white; /* Ensures text remains readable */
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent vertical and horizontal scrollbars */
+  height: 100%;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ✅ Page Content Wrapper to Prevent Navbar Overlap */
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 70px; /* Space for navbar */
+}
+
+/* ✅ Infinite Scrolling Gallery */
+.gallery-container {
+  height: 100vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0px; /* No space between images */
+  width: 100vw;
+}
+
+.image-wrapper {
+  width: 100%;
+  height: auto;
+}
+
+.portfolio-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* ✅ Image Hover Overlay */
+.image-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+/* ✅ Delayed Hover Effect */
+.image-overlay {
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 50%, rgba(0, 0, 0, 0) 100%);
+  color: rgba(255, 255, 255, 0.5); /* ✅ More transparent text */
+  text-align: center;
+  padding-bottom: 10px; /* Less spacing */
+  font-family: "Roboto Mono", monospace;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 2s ease-in-out, transform 2.5s ease-in-out; /* ✅ Slower easing */
+}
+
+.image-wrapper:hover .image-overlay {
+  opacity: 1; /* Show description and notes on hover */
+  transition-delay: 2s; /* ✅ Ensures 3s delay before appearing */
+}
+
+/* ✅ Move Overlay Text Closer to Bottom */
+.image-overlay p {
+  margin-bottom: 10px; /* ✅ Moves text lower */
+  line-height: .3; /* ✅ Reduces space between lines */
+}
+
+/* ✅ Full-Screen Image */
+.fullscreen-image-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;  /* Full width */
+  height: 100vh; /* Full height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black; /* Ensure background remains black */
+  z-index: 999; /* Ensure it appears on top */
+  overflow: hidden;
+}
+
+/* ✅ Ensure the Image Fits Without Margins */
+.fullscreen-image {
+  max-width: 100vw; /* Fill full width */
+  max-height: 100vh; /* Fill full height */
+  object-fit: contain; /* Maintain aspect ratio */
+}
+
+/* ✅ Navbar Styling */
+.navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 70px;
+  background: rgba(0, 0, 0, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  z-index: 3000;
+  transition: height 0.4s ease-in-out; /* Expanding Animation */
+}
+
+/* ✅ Expanded Image Modal */
+.expanded-image-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.expanded-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+.expanded-info {
+  position: absolute;
+  bottom: 70px; /* Moves above navbar */
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.expanded-description, .expanded-notes {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+
+/* ✅ Expanding Navbar */
+.expanded-navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: rgba(0, 0, 0, 1);
+  transition: height 0.3s ease-in-out;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 2999; /* ✅ Ensure it's above the fullscreen image */
+}
+
+/* ✅ Navbar Adjustments for Expanded View */
+.navbar.expanded {
+  height: 200px; /* Expand navbar to display text */
+  transition: height 0.3s ease-in-out;
+}
+
+.expanded-navbar.expanded {
+  height: 100px; /* Adjust height as needed */
+  transform: translateY(-70px); /* Move up */
+  opacity: 1;
+}
+
+/* ✅ When Switching Sections - Brief Collapse */
+.expanded-navbar.collapsing {
+  height: 0;
+  background: rgba(0, 0, 0, 1);
+  transition: height 0.3s ease-in-out;
+}
+
+/* ✅ Email Subscription Section */
+.email-expanded {
+  background: rgba(0, 0, 0, 1);
+}
+
+.email-text {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* ✅ Email Input Box */
+.email-input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.email-input {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  padding: 8px;
+  width: 290px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  outline: none;
+}
+
+.email-submit {
+  font-size: 16px;
+  background: white;
+  color: black;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  width: 100px;
+}
+
+/* ✅ Ensure Side-by-Side Layout */
+.expanded-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ✅ Left Side: About Text */
+.about-container {
+  width: 40%;
+  text-align: right; /* Align text to the right */
+  padding-right: 20px;
+}
+
+.about-text {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: right;
+}
+
+/* ✅ Contact Button - Right Side */
+.button-container {
+  width: 40%;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.contact-button {
+  background: white;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: 'Roboto Mono', monospace; /* ✅ Apply Font */
+  font-weight: 700;
+}
+
+/* ✅ About Section (Left) */
+.nav-about {
+  position: absolute;
+  top: 0px;
+  left: 20px;
+  font-size: 16px;
+  text-align: left;
+  max-width: 250px;
+}
+
+/* ✅ Contact Button (Centered) */
+.nav-contact-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #61dafb;
+  border: none;
+  cursor: pointer;
+  font-family: 'Roboto Mono', monospace; /* ✅ Apply Font */
+  font-weight: 700; /* Bold weight */
+}
+
+.nav-contact-button:hover {
+  background-color: #4da3d8;
+}
+
+/* ✅ Left Logo - Flush to Bottom Left */
+.nav-left {
+  display: flex;
+  align-items: flex-end; /* Aligns logo to the bottom */
+  justify-content: flex-start;
+  width: 33.3%;
+  height: 100%;
+}
+
+.nav-logo {
+  height: 84px; /* Reduced height to fit in navbar */
+  object-fit: contain;
+  margin: 0;
+  position: relative;
+  transform: translateY(20px); /* Moves it downward */
+  cursor: pointer; /* Clickable to expand */
+}
+
+/* ✅ Center Logo - Perfectly Centered */
+.nav-center {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  width: 33.3%;
+}
+
+.nav-categories {
+  height: 84px; /* Reduced height to fit in navbar */
+  object-fit: contain;
+  margin: 0;
+  position: relative;
+  transform: translateY(12px); /* Moves it downward */
+}
+
+/* ✅ Right Side Icons - Properly Aligned */
+.nav-right {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  width: 33.3%;
+  align-items: center;
+  margin-right: 20px; /* Adds space from the right edge */
+  margin-bottom: -16px;
+}
+
+/* ✅ Social Media Icons - Initially Transparent */
+.nav-icon {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+  margin-right: 10px; /* Adds space from the right edge */
+  opacity: 0.1; /* Default transparency */
+  transition: opacity 0.3s ease-in-out; /* Smooth fade effect */
+  cursor: pointer;
+}
+
+/* ✅ Fully Visible on Hover */
+.nav-right a:hover img.nav-icon {
+  opacity: 1; /* Full visibility on hover */
+}
+
+/* ✅ Dropzone Styling (Preserved) */
+.dropzone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: white;
+}
+.dropzone:hover {
+  background-color: #f0f0f0;
+}
+
+/* ✅ Admin Panel Table Styling */
+.image-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.image-table th, .image-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.image-table th {
+  background-color: #f4f4f4;
+}
+
+.thumbnail {
+  max-width: 100px;
+  height: auto;
+}
+
+/* ✅ Sync Button */
+.sync-button {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #61dafb;
+  border: none;
+  cursor: pointer;
+}
+.sync-button:hover {
+  background-color: #4da3d8;
+}
+
+/* ✅ Status Message */
+.status-message {
+  color: red;
+  font-weight: bold;
+}
+
+/* ✅ Delete Button */
+.delete-button {
+  color: white;
+  background-color: red;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.delete-button:hover {
+  background-color: darkred;
+}
+
+/* ✅ Ensure Share Links Are Horizontal */
+.share-options {
+  display: flex; /* Aligns items in a row */
+  justify-content: center; /* Centers links horizontally */
+  align-items: center;
+  gap: 15px; /* Adds space between links */
+  margin-top: 10px;
+}
+
+/* ✅ "Share to:" Label */
+.share-options .share-label {
+  font-family: "Roboto Mono", monospace;
+  color: rgba(255, 255, 255, 0.3); /* 30% opacity white */
+  font-size: 14px;
+}
+
+/* ✅ Ensure Share Links Use Roboto Mono Font and White Color */
+.share-options a {
+  font-family: "Roboto Mono", monospace;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: color 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+/* ✅ Add Hover Effect */
+.share-options a:hover {
+  color: #61dafb; /* Light blue hover effect */
+}
+
+

@@ -1,0 +1,174 @@
+/* ✅ Full Page Layout */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent vertical and horizontal scrollbars */
+  height: 100%;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ✅ Page Content Wrapper to Prevent Navbar Overlap */
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 70px; /* Space for navbar */
+}
+
+/* ✅ Infinite Scrolling Gallery */
+.gallery-container {
+  height: 100vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0px; /* No space between images */
+  width: 100vw;
+}
+
+.image-wrapper {
+  width: 100%;
+  height: auto;
+}
+
+.portfolio-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* ✅ Navbar Styling */
+.navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 70px;
+  background: rgba(0, 0, 0, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  z-index: 1000;
+}
+
+/* ✅ Left Logo - Flush to Bottom Left */
+.nav-left {
+  display: flex;
+  align-items: flex-end; /* Aligns logo to the bottom */
+  justify-content: flex-start;
+  width: 33.3%;
+  height: 100%;
+}
+
+.nav-logo {
+  height: 84px; /* Reduced height to fit in navbar */
+  object-fit: contain;
+  margin: 0;
+  position: relative;
+  transform: translateY(20px); /* Moves it downward */
+}
+
+/* ✅ Center Logo - Perfectly Centered */
+.nav-center {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  width: 33.3%;
+}
+
+.nav-categories {
+  height: 84px; /* Reduced height to fit in navbar */
+  object-fit: contain;
+  margin: 0;
+  position: relative;
+  transform: translateY(12px); /* Moves it downward */
+}
+
+/* ✅ Right Side Icons - Properly Aligned */
+.nav-right {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+  width: 33.3%;
+  align-items: center;
+}
+
+.nav-icon {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+  margin-right: 20px; /* Ensures margin from edges */
+}
+
+/* ✅ Dropzone Styling (Preserved) */
+.dropzone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: white;
+}
+.dropzone:hover {
+  background-color: #f0f0f0;
+}
+
+/* ✅ Admin Panel Table Styling */
+.image-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.image-table th, .image-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.image-table th {
+  background-color: #f4f4f4;
+}
+
+.thumbnail {
+  max-width: 100px;
+  height: auto;
+}
+
+/* ✅ Sync Button */
+.sync-button {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  background-color: #61dafb;
+  border: none;
+  cursor: pointer;
+}
+.sync-button:hover {
+  background-color: #4da3d8;
+}
+
+/* ✅ Status Message */
+.status-message {
+  color: red;
+  font-weight: bold;
+}
+
+/* ✅ Delete Button */
+.delete-button {
+  color: white;
+  background-color: red;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.delete-button:hover {
+  background-color: darkred;
+}
