@@ -150,7 +150,7 @@ app.get("/api/subscribers", async (req, res) => {
     }
 });
 
-// ✅ Admin: Edit Subscriber
+// ✅ Admin: Update Subscriber
 app.put("/api/subscribers/:id", async (req, res) => {
     try {
         const updatedSubscriber = await Subscriber.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -169,6 +169,7 @@ app.delete("/api/subscribers/:id", async (req, res) => {
         res.status(500).json({ error: "Failed to delete subscriber" });
     }
 });
+
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;

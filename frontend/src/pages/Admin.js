@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
-import NavBar from "../components/NavBar"; // ✅ Import NavBar
-import "../App.css"; // ✅ Ensure styles are applied
+import NavBar from "../components/NavBar";
+import "../App.css";
 
 function Admin() {
     const [images, setImages] = useState([]);
     const [users, setUsers] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState("");
-    const [view, setView] = useState("images"); // ✅ Toggle between Images and Users management
+    const [view, setView] = useState("images");
 
     useEffect(() => {
         fetchImages();
         fetchUsers();
     }, []);
 
-    // ✅ Fetch images from backend
+    // Fetch images
     const fetchImages = async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/images");
@@ -26,30 +26,17 @@ function Admin() {
         }
     };
 
-    // ✅ Fetch users from backend
+    // Fetch users
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/users");
+            const response = await axios.get("http://localhost:5000/api/subscribers");
             setUsers(response.data);
         } catch (error) {
             console.error("Error fetching users:", error);
         }
     };
 
-    // ✅ Sync images from S3 and refresh list
-    const syncAndFetchImages = async () => {
-        try {
-            setMessage("Syncing images from S3...");
-            await axios.get("http://localhost:5000/api/sync-s3");
-            await fetchImages();
-            setMessage("Sync complete!");
-        } catch (error) {
-            console.error("Error syncing images:", error);
-            setMessage("Failed to sync images.");
-        }
-    };
-
-    // ✅ Handle inline updates for images
+    // Handle inline updates for images
     const handleUpdateImage = async (id, field, value) => {
         try {
             const updatedImage = { ...images.find(img => img._id === id), [field]: value };
@@ -61,45 +48,41 @@ function Admin() {
         }
     };
 
-    // ✅ Handle inline updates for users
+    // Handle Delete Image
+    const handleDeleteImage = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this image?")) return;
+        try {
+            await axios.delete(`http://localhost:5000/api/images/${id}`);
+            setImages(images.filter(image => image._id !== id));
+        } catch (error) {
+            console.error("Error deleting image:", error);
+        }
+    };
+
+    // Handle inline updates for users
     const handleUpdateUser = async (id, field, value) => {
         try {
             const updatedUser = { ...users.find(user => user._id === id), [field]: value };
             setUsers(users.map(user => (user._id === id ? updatedUser : user)));
 
-            await axios.put(`http://localhost:5000/api/users/${id}`, { [field]: value });
+            await axios.put(`http://localhost:5000/api/subscribers/${id}`, { [field]: value });
         } catch (error) {
             console.error("Error updating user:", error);
         }
     };
 
-    // ✅ Handle Delete Image
-    const handleDeleteImage = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this image?")) return;
-
-        try {
-            await axios.delete(`http://localhost:5000/api/images/${id}`);
-            setImages(images.filter(img => img._id !== id));
-        } catch (error) {
-            console.error("Error deleting image:", error);
-            setMessage("Failed to delete image.");
-        }
-    };
-
-    // ✅ Handle Delete User
+    // Handle Delete User
     const handleDeleteUser = async (id) => {
         if (!window.confirm("Are you sure you want to delete this user?")) return;
-
         try {
-            await axios.delete(`http://localhost:5000/api/users/${id}`);
+            await axios.delete(`http://localhost:5000/api/subscribers/${id}`);
             setUsers(users.filter(user => user._id !== id));
         } catch (error) {
             console.error("Error deleting user:", error);
-            setMessage("Failed to delete user.");
         }
     };
 
-    // ✅ Drag and Drop Upload
+    // Drag and Drop Upload
     const onDrop = useCallback(async (acceptedFiles) => {
         setUploading(true);
         setMessage("Uploading images...");
@@ -115,7 +98,7 @@ function Admin() {
             });
 
             setMessage(response.data.message);
-            await fetchImages(); // Refresh images after upload
+            await fetchImages();
         } catch (error) {
             console.error("Error uploading images:", error);
             setMessage("Failed to upload images.");
@@ -128,10 +111,9 @@ function Admin() {
 
     return (
         <>
-            <div className="page-content"> {/* ✅ Ensures the content doesn't overlap with NavBar */}
+            <div className="page-content">
                 <h1>Admin Panel</h1>
 
-                {/* ✅ Navigation between Admin Sections */}
                 <div className="admin-nav">
                     <button onClick={() => setView("images")} className={view === "images" ? "active" : ""}>Manage Images</button>
                     <button onClick={() => setView("users")} className={view === "users" ? "active" : ""}>Manage Users</button>
@@ -139,7 +121,6 @@ function Admin() {
 
                 {view === "images" && (
                     <>
-                        {/* ✅ Drag & Drop Upload */}
                         <div {...getRootProps()} className="dropzone">
                             <input {...getInputProps()} />
                             <p>{isDragActive ? "Drop the files here..." : "Drag & Drop images or click to upload"}</p>
@@ -147,52 +128,35 @@ function Admin() {
 
                         {uploading && <p>Uploading...</p>}
 
-                        {/* ✅ Sync Button */}
-                        <button onClick={syncAndFetchImages} className="sync-button">Sync & Refresh Images</button>
-
                         <h2>Uploaded Images</h2>
 
                         {images.length === 0 ? (
                             <p>No images uploaded yet.</p>
                         ) : (
-                            <table className="image-table">
-                                <thead>
-                                    <tr>
-                                        <th>Preview</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Notes</th>
-                                        <th>Category</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {images.map((image) => (
-                                        <tr key={image._id}>
-                                            <td><img src={image.url} alt="preview" className="thumbnail" /></td>
-                                            <td>
-                                                <input type="text" value={image.title} onChange={(e) => handleUpdateImage(image._id, "title", e.target.value)} />
-                                            </td>
-                                            <td>
-                                                <input type="text" value={image.description} onChange={(e) => handleUpdateImage(image._id, "description", e.target.value)} />
-                                            </td>
-                                            <td>
-                                                <input type="text" value={image.notes} onChange={(e) => handleUpdateImage(image._id, "notes", e.target.value)} />
-                                            </td>
-                                            <td>
-                                                <select value={image.category} onChange={(e) => handleUpdateImage(image._id, "category", e.target.value)}>
-                                                    <option value="Still">Still</option>
-                                                    <option value="Moving">Moving</option>
-                                                    <option value="Interactive">Interactive</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <button onClick={() => handleDeleteImage(image._id)} className="delete-button">Delete</button>
-                                            </td>
+                            <div className="scrollable-table-container">
+                                <table className="image-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Preview</th>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Notes</th>
+                                            <th>Actions</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {images.map((image) => (
+                                            <tr key={image._id}>
+                                                <td><img src={image.url} alt="preview" className="thumbnail" /></td>
+                                                <td><input type="text" value={image.title} onChange={(e) => handleUpdateImage(image._id, "title", e.target.value)} /></td>
+                                                <td><input type="text" value={image.description} onChange={(e) => handleUpdateImage(image._id, "description", e.target.value)} /></td>
+                                                <td><input type="text" value={image.notes} onChange={(e) => handleUpdateImage(image._id, "notes", e.target.value)} /></td>
+                                                <td><button onClick={() => handleDeleteImage(image._id)} className="delete-button">Delete</button></td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         )}
                     </>
                 )}
@@ -227,7 +191,7 @@ function Admin() {
                     </>
                 )}
             </div>
-            <NavBar /> {/* ✅ Fixed Bottom Navigation */}
+            <NavBar />
         </>
     );
 }

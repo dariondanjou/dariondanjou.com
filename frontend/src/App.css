@@ -5,6 +5,7 @@
 html, body {
   background-color: black;
   color: white; /* Ensures text remains readable */
+  font-family: 'Roboto Mono', monospace;
   margin: 0;
   padding: 0;
   overflow: hidden; /* Prevent vertical and horizontal scrollbars */
@@ -382,6 +383,13 @@ html, body {
 }
 
 /* ✅ Admin Panel Table Styling */
+/* ✅ Fix scrolling issue */
+.scrollable-table-container {
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
 .image-table {
   width: 100%;
   border-collapse: collapse;
@@ -389,11 +397,9 @@ html, body {
 
 .image-table th, .image-table td {
   border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.image-table th {
   background-color: #f4f4f4;
+  padding: 8px;
+  white-space: nowrap;
 }
 
 .thumbnail {
@@ -419,6 +425,44 @@ html, body {
   color: red;
   font-weight: bold;
 }
+
+.user-table, .image-table {
+  width: 100%;
+  overflow-x: auto;
+  max-height: 80vh; /* Ensures vertical scrolling */
+  display: block;
+}
+
+.user-table tbody, .image-table tbody {
+  display: block;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.user-table thead, .image-table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.user-table tr, .image-table tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.user-table th, .user-table td {
+  border: 1px solid white; /* Ensure clear table borders */
+  padding: 8px;
+  text-align: left;
+}
+
+.user-table input {
+  background: black; /* Match the theme */
+  color: white;
+  border: 1px solid white;
+}
+
 
 /* ✅ Delete Button */
 .delete-button {
@@ -465,5 +509,223 @@ html, body {
 .share-options a:hover {
   color: #61dafb; /* Light blue hover effect */
 }
+
+/* Contact Page Styling */
+.contact-title img {
+  width: 300px;
+  display: block;
+  margin: 20px auto;
+}
+
+/* Contact Form Styles */
+.contact-form {
+  width: 50%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form label {
+  color: white;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.contact-form input, .contact-form select, .contact-form textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  padding: 10px;
+  width: 100%;
+}
+
+
+/* Dropdown background and text */
+.contact-form select {
+  cursor: pointer;
+  background-color: black; /* Dropdown background */
+  color: white; /* Text color */
+  border: 1px solid white;
+}
+
+/* Dropdown options background and text */
+.contact-form select option {
+  background-color: black; /* Background of options */
+  color: white; /* Text color */
+}
+
+/* Override the blue highlight when hovering over options */
+.contact-form select option:hover,
+.contact-form select option:focus {
+  background-color: #333333 !important; /* Dark gray highlight */
+  color: white;
+}
+
+/* Override selected option highlight */
+.contact-form select option:checked {
+  background-color: black !important; /* Keeps selected option background black */
+  color: white;
+}
+
+
+
+
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.dropdown-arrow {
+  width: 20px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.promo-image {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.calendly-widget {
+  text-align: center;
+  color: white;
+  margin-top: 10px;
+}
+
+/* Submit Button */
+.submit-button {
+  background: white;
+  color: black;
+  padding: 15px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Thank You Message */
+.thank-you-message {
+  text-align: center;
+  color: #61dafb;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+
+/* 🔥 Custom Dropdown Styling 🔥 */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.dropdown-header {
+  background: black;
+  color: white;
+  padding: 10px;
+  border: 1px solid white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow {
+  transition: transform 0.3s ease-in-out;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.dropdown-options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: black;
+  border: 1px solid white;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+}
+
+.dropdown-options li {
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.dropdown-options li:hover {
+  background: #333; /* Dark gray highlight */
+}
+
+/* Custom Dropdown */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+  background: black;
+  border: 1px solid white;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.dropdown-header {
+  padding: 10px;
+  background: black;
+  border: 1px solid white;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+}
+
+.dropdown-list {
+  position: absolute;
+  width: 100%;
+  background: black;
+  border: 1px solid white;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  text-align: left;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+/* Dark gray background when hovered or focused */
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: #444;
+
+  /* Training Promo Image */
+.promo-image {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Calendly Widget */
+.calendly-widget {
+  text-align: center;
+  color: white;
+  margin-top: 10px;
+}
+}
+
+
 
 
