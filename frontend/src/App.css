@@ -19,12 +19,28 @@ html, body {
   min-height: 100vh;
 }
 
+* {
+  font-family: 'Roboto Mono', monospace !important;
+}
+
+
+/* ✅ Ensures the Contact Page is Centered */
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
 /* ✅ Page Content Wrapper to Prevent Navbar Overlap */
 .page-content {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 70px; /* Space for navbar */
 }
+
+
 
 /* ✅ Infinite Scrolling Gallery */
 .gallery-container {
@@ -40,11 +56,6 @@ html, body {
   width: 100vw;
 }
 
-.image-wrapper {
-  width: 100%;
-  height: auto;
-}
-
 .portfolio-image {
   width: 100%;
   height: auto;
@@ -53,6 +64,8 @@ html, body {
 
 /* ✅ Image Hover Overlay */
 .image-wrapper {
+  width: 100%;
+  height: auto;  
   position: relative;
   cursor: pointer;
 }
@@ -519,27 +532,66 @@ html, body {
 
 /* Contact Form Styles */
 .contact-form {
-  width: 50%;
+  width: 100%;
   margin: auto;
   display: flex;
   flex-direction: column;
+  align-items: center;  
 }
 
 .contact-form label {
-  color: white;
   margin-top: 10px;
   font-weight: bold;
-}
-
-.contact-form input, .contact-form select, .contact-form textarea {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid white;
+  text-align: left;
+  width: 100%;  
   color: white;
-  padding: 10px;
-  width: 100%;
 }
 
+/* ✅ Two-Column Layout Adjustments */
+.contact-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  height: 80vh;
+  width: 80%;
+  margin: auto;
+}
+
+.contact-left {
+  width: 33%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: right;
+}
+
+
+/* ✅ Right Column */
+.contact-right {
+  width: 67%;
+  padding: 20px;
+}
+
+/* ✅ Contact Intro and Footer */
+.contact-intro, .contact-footer {
+  font-family: 'Roboto Mono', monospace;
+}
+
+.contact-intro {
+  text-align: right;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.contact-footer {
+  text-align: right;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+}
 
 /* Dropdown background and text */
 .contact-form select {
@@ -555,12 +607,6 @@ html, body {
   color: white; /* Text color */
 }
 
-/* Override the blue highlight when hovering over options */
-.contact-form select option:hover,
-.contact-form select option:focus {
-  background-color: #333333 !important; /* Dark gray highlight */
-  color: white;
-}
 
 /* Override selected option highlight */
 .contact-form select option:checked {
@@ -568,25 +614,49 @@ html, body {
   color: white;
 }
 
-
-
-
-.dropdown-container {
-  display: flex;
-  align-items: center;
-  position: relative;
+/* Override the blue highlight when hovering over options */
+.contact-form select option:hover,
+.contact-form select option:focus {
+  background-color: #333333 !important; /* Dark gray highlight */
+  color: white;
 }
 
-.dropdown-arrow {
-  width: 20px;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+.contact-form input, .contact-form select, .contact-form textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
 }
 
+.contact-form textarea {
+  min-height: 260px;
+}
+
+.contact-form input, 
+.contact-form textarea, 
+.contact-form select, 
+.contact-form button {
+  font-family: 'Roboto Mono', monospace !important;
+}
+
+
+
+/* ✅ Ensures proper spacing for training info */
+.training-info {
+  text-align: center;
+  font-size: 14px;
+  color: white;
+  margin-top: 20px;
+}
+
+
+/* ✅ Training Image */
 .promo-image {
   width: 100%;
+  height: auto;
   margin-top: 20px;
 }
 
@@ -618,12 +688,27 @@ html, body {
 }
 
 
-/* 🔥 Custom Dropdown Styling 🔥 */
+.arrow {
+  transition: transform 0.3s ease-in-out;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Custom Dropdown */
 .custom-dropdown {
   position: relative;
   width: 100%;
-  font-family: 'Roboto Mono', monospace;
+  background: black;
+  border: 1px solid white;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  padding: 10px;
+  text-align: left;
 }
+
 
 .dropdown-header {
   background: black;
@@ -634,14 +719,22 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 16px;
 }
 
-.arrow {
-  transition: transform 0.3s ease-in-out;
+
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
-.arrow.open {
-  transform: rotate(180deg);
+.dropdown-arrow {
+  width: 20px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .dropdown-options {
@@ -665,36 +758,14 @@ html, body {
   background: #333; /* Dark gray highlight */
 }
 
-/* Custom Dropdown */
-.custom-dropdown {
-  position: relative;
-  width: 100%;
-  background: black;
-  border: 1px solid white;
-  cursor: pointer;
-  font-size: 16px;
-  color: white;
-  padding: 10px;
-  text-align: left;
-}
-
-.dropdown-header {
-  padding: 10px;
-  background: black;
-  border: 1px solid white;
-  cursor: pointer;
-  font-size: 16px;
-  color: white;
-}
-
 .dropdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: black;
+  border: 1px solid white;
   position: absolute;
   width: 100%;
-  background: black;
-  border: 1px solid white;
-  margin: 0;
-  padding: 0;
-  list-style: none;
   z-index: 1000;
 }
 
@@ -711,20 +782,8 @@ html, body {
 .dropdown-item:hover,
 .dropdown-item:focus {
   background: #444;
-
-  /* Training Promo Image */
-.promo-image {
-  width: 100%;
-  margin-top: 20px;
 }
 
-/* Calendly Widget */
-.calendly-widget {
-  text-align: center;
-  color: white;
-  margin-top: 10px;
-}
-}
 
 
 
