@@ -180,8 +180,6 @@ function Contact() {
                     {submitted && <p className="thank-you-message">thank you! if you need to add detail, feel free to submit another form.</p>}
                 </div>
             </div>
-
-            <NavBar />
         </>
     );
 }

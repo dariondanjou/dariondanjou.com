@@ -22,52 +22,57 @@ function NavBar({ expandedImage }) {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // Expand/Collapse logic with smooth height transition
     const toggleExpand = (type) => {
-        if (location.pathname === "/contact") return;
-    
-        if (expanded && expandedType === type) {
-            // If the same type is clicked, collapse smoothly
-            document.querySelector(".expanded-navbar").classList.add("collapsing");
-            
-            setTimeout(() => {
-                setExpanded(false);
-                setExpandedType(null);
-                document.querySelector(".expanded-navbar").classList.remove("collapsing");
-            }, 300); // Matches CSS transition time
-        } else {
-            // If switching between expanded sections, collapse smoothly first
-            document.querySelector(".expanded-navbar").classList.add("collapsing");
-            
-            setTimeout(() => {
-                setExpanded(false);
-                setExpandedType(null);
-    
+        collapseExpanded(() => { //Always call with callback
+            if (expandedType!== type) { // Only expand if the type is different
                 setTimeout(() => {
                     setExpanded(true);
                     setExpandedType(type);
-                }, 50); // Small delay to prevent instant jump
-            }, 300); // Collapse before expanding new section
-        }
+                }, 100);
+            }
+        });
     };
-    
+
+    const collapseExpanded = (callback) => {
+        const navbarElement = document.querySelector(".expanded-navbar");
+        if (!navbarElement) return;
+
+        navbarElement.classList.add("collapsing");
+
+        setTimeout(() => {
+            setExpanded(false);
+            setExpandedType(null);
+            navbarElement.classList.remove("collapsing");
+
+            if (callback) {
+                setTimeout(callback, 100);
+            }
+        }, 300); // Smooth height collapse
+    };
+
+    const handleNavigation = (route) => {
+        if (location.pathname === route) return;
+        collapseExpanded(() => navigate(route));
+    };
 
     const handleEmailSubmit = async () => {
         if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
             alert("Please enter a valid email address.");
             return;
         }
-    
+
         try {
             const response = await fetch("http://localhost:5000/api/subscribe", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
             });
-    
+
             if (response.ok) {
                 alert("You have been subscribed successfully!");
                 setEmail("");
-                setExpanded(false);
+                collapseExpanded();
             } else {
                 alert("Failed to subscribe. Please try again.");
             }
@@ -76,11 +81,10 @@ function NavBar({ expandedImage }) {
             alert("An error occurred. Please try again.");
         }
     };
-    
-    
 
     return (
         <>
+            {/* Expanded Navbar Section */}
             <div className={`expanded-navbar ${expanded ? "expanded" : ""} ${expandedType === "email" ? "email-expanded" : ""} ${expandedType === "share" ? "sharing-expanded" : ""}`}>
                 <div className="expanded-content">
                     {expandedType === "email" ? (
@@ -113,7 +117,7 @@ function NavBar({ expandedImage }) {
                                 </p>
                             </div>
                             <div className="button-container">
-                                <button className="contact-button" onClick={() => navigate("/contact")}>
+                                <button className="contact-button" onClick={() => handleNavigation("/contact")}>
                                     let’s work together! ➝
                                 </button>
                             </div>
@@ -122,19 +126,32 @@ function NavBar({ expandedImage }) {
                 </div>
             </div>
 
+            {/* Main Navbar */}
             <nav className={`navbar ${expandedImage ? "expanded" : ""}`}>
                 <div className="nav-left">
-                    <a href="#" role="button" onClick={(e) => { e.preventDefault(); toggleExpand("about"); }}>
+                    <a 
+                        href="#" 
+                        role="button" 
+                        onClick={(e) => { 
+                            e.preventDefault();
+                            if (location.pathname === "/contact") {
+                                handleNavigation("/");
+                            } else {
+                                toggleExpand("about");
+                            }
+                        }}
+                    >
                         <img src={logoMain} alt="Darion D'Anjou | Creativity x Technology" className="nav-logo" />
                     </a>
                 </div>
 
-                <div className="nav-center">
-                    <img src={logoCategories} alt="Still | Moving | Interactive" className="nav-categories" />
-                </div>
+                {(location.pathname === "/" || location.pathname === "/portfolio") && (
+                    <div className="nav-center">
+                        <img src={logoCategories} alt="Still | Moving | Interactive" className="nav-categories" />
+                    </div>
+                )}
 
                 <div className="nav-right">
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a href="#" role="button" tabIndex="0" onClick={(e) => { e.preventDefault(); toggleExpand("email"); }}>
                         <img src={iconContact} alt="Sign up for updates" className="nav-icon" />
                     </a>
@@ -162,7 +179,6 @@ function NavBar({ expandedImage }) {
                     <a href="https://wa.me/your-whatsapp-number" target="_blank" rel="noopener noreferrer">
                         <img src={iconWhatsapp} alt="WhatsApp" className="nav-icon" />
                     </a>
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <a href="#" role="button" tabIndex="0" onClick={(e) => { e.preventDefault(); toggleExpand("share"); }}>
                         <img src={iconShare} alt="Share" className="nav-icon" />
                     </a>
