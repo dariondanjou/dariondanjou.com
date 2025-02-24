@@ -37,6 +37,8 @@ function Contact() {
     const [submitted, setSubmitted] = useState(false);
     const [promoImage, setPromoImage] = useState("");
 
+
+
     const dropdownRef = useRef(null);
     const trainingDropdownRef = useRef(null);
 
@@ -54,6 +56,18 @@ function Contact() {
         "10 minute free consultation (one-on-one $0)": `${BASE_IMAGE_URL}/image%20(10).png`
     };
 
+    const trainingDescriptions = {
+        "midjourney quickstart (1 hour one-on-one $250)": "This one-on-one session will get you from beginner to advanced in AI image generation using Midjourney.",
+        "midjourney quickstart (2 hour group $50)": "Join a group training session to master Midjourney and create stunning AI-generated images.",
+        "ai filmmaking quickstart (1 hour one-on-one $250)": "A private AI filmmaking training session covering automated video creation and storytelling.",
+        "ai filmmaking quickstart (2 hour group $50)": "A collaborative session for learning AI filmmaking techniques with a group.",
+        "custom consultation (1 hour one-on-one $250)": "Tailored one-on-one consulting to address your specific AI creative workflow needs.",
+        "10 minute free consultation (one-on-one $0)": "A quick free consultation to discuss AI creativity and see how we can help."
+    };
+
+    const [trainingDescription, setTrainingDescription] = useState(trainingDescriptions["midjourney quickstart (1 hour one-on-one $250)"]);    
+    
+
     const handleChange = (name, value) => {
         setFormData({ ...formData, [name]: value });
 
@@ -67,8 +81,10 @@ function Contact() {
         if (name === "trainingType") {
             setShowCalendly(true);
             setPromoImage(trainingOptions[value]);
+            setTrainingDescription(trainingDescriptions[value]); // Update training description
             setTrainingDropdownOpen(false);
         }
+        
     };
 
     const handleSubmit = async (e) => {
@@ -135,9 +151,10 @@ function Contact() {
                     {showTrainingOptions && (
                         <div className="training-info">
                             <img src={promoImage} alt="Training Promo" className="promo-image" />
-                            <p>personalized training to elevate your creative skills</p>
+                            <p>{trainingDescription}</p> {/* Dynamically update text */}
                         </div>
                     )}
+
 
                     <p className="contact-footer">
                         darion d’anjou is an ai powered creative studio that leverages the latest in technology to deliver best of class creative and technology solutions
@@ -198,8 +215,7 @@ function Contact() {
                         <input type="text" name="projectSubject" value={formData.projectSubject} placeholder="working title for your project" onChange={(e) => handleChange("projectSubject", e.target.value)} required />
                         <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
 
-                        <textarea name="projectDescription" value={formData.projectDescription} placeholder="tell us more about your project" onChange={(e) => handleChange("projectDescription", e.target.value)} required />
-                        
+                        <textarea name="projectDescription" className="project-description" value={formData.projectDescription} placeholder="tell us more about your project" onChange={(e) => handleChange("projectDescription", e.target.value)} required />
                         <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
                         <p></p>
                         <p></p>
