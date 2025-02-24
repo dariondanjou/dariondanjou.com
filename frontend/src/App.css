@@ -25,7 +25,7 @@ html, body {
 
 input:focus {
   outline: none;
-  border: none; /* Optional: If you want to remove any existing border */
+  border: none; 
 }
 
 
@@ -565,10 +565,10 @@ input:focus {
 
 .contact-left {
   width: 33%;
-  padding: 20px;
+  padding: 0 20px; /* Remove padding at the top */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start; /* Aligns content at the top */
   text-align: right;
 }
 
@@ -578,7 +578,7 @@ input:focus {
   position: relative;
   top: 0; 
   right: 252px;
-  margin-top: -8vh;
+  margin-top: -6vh;
   margin-right: -4vw; 
   max-width: none; /* Prevent max-width constraints */
 }
@@ -601,13 +601,17 @@ input:focus {
   font-size: 16px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.8);
+  margin-top: 0; /* Ensure no margin at the top */
+  padding-top: 0; /* Remove extra padding */
 }
+
 
 .contact-footer {
   text-align: right;
   font-size: 16px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0;
 }
 
 /* Dropdown background and text */
@@ -615,7 +619,6 @@ input:focus {
   cursor: pointer;
   background-color: black; /* Dropdown background */
   color: white; /* Text color */
-  /*border: 1px solid white;*/
   border: none; /* ✅ Prevents border from appearing */
 }
 
@@ -644,7 +647,6 @@ input:focus {
 
 .contact-form input, .contact-form select, .contact-form textarea {
   background: transparent;
-  /*border-bottom: 1px dotted white;*/
   border: none;
   color: white;
   padding: 10px;
@@ -696,15 +698,25 @@ input:focus {
 
 /* Submit Button */
 .submit-button {
-  background: white;
-  color: black;
-  padding: 15px;
+  background: transparent; /* Remove background */
+  color: white; /* Ensure text is white */
   border: none;
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
-  margin-top: 10px;
+  text-align: left;
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between text and arrow */
 }
+
+.submit-button img {
+  width: auto; /* Size the arrow */
+  height: auto;
+}
+
 
 /* Thank You Message */
 .thank-you-message {

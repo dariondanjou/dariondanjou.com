@@ -11,6 +11,7 @@ const bookArrowFreeDemo = `${BASE_IMAGE_URL}/book-arrow-free-demo.png`;
 const bookArrowOneOnOne = `${BASE_IMAGE_URL}/book-arrow-one-on-one.png`;
 const contactFieldLineDropdownArrow = `${BASE_IMAGE_URL}/contact-field-line-dropdownarrow.png`;
 const contactFieldLine = `${BASE_IMAGE_URL}/contact-field-line.png`;
+const contactFieldLineArrow = `${BASE_IMAGE_URL}/contact-field-line-arrow.png`;
 const logoDarionDanjou = `${BASE_IMAGE_URL}/logo-dariondanjou-creativityxtechnology.png`;
 const logoStillMoving = `${BASE_IMAGE_URL}/logo-stillmovinginteractive.png`;
 const scanlines = `${BASE_IMAGE_URL}/scanlines.png`;
@@ -145,12 +146,15 @@ function Contact() {
 
                 <div className="contact-right">
                     <form className="contact-form" onSubmit={handleSubmit}>
+                        <p></p>
+                        <p></p>
                         <input type="text" name="name" value={formData.name} placeholder="your name" onChange={(e) => handleChange("name", e.target.value)} required />
                         <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
 
                         <input type="email" name="email" value={formData.email} placeholder="your@email.com" onChange={(e) => handleChange("email", e.target.value)} required />
                         <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
 
+                        <p></p>
                         <label>what kind of project do you have in mind?</label>
                         <div className="custom-dropdown" ref={dropdownRef}>
                             <div className="dropdown-header" onClick={() => setDropdownOpen(!dropdownOpen)}>
@@ -190,13 +194,19 @@ function Contact() {
                         )}
 
                         <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
+                        <p></p>
                         <input type="text" name="projectSubject" value={formData.projectSubject} placeholder="working title for your project" onChange={(e) => handleChange("projectSubject", e.target.value)} required />
                         <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
 
-                        <textarea name="projectDescription" value={formData.projectDescription} placeholder="enter details about your project here" onChange={(e) => handleChange("projectDescription", e.target.value)} required />
+                        <textarea name="projectDescription" value={formData.projectDescription} placeholder="tell us more about your project" onChange={(e) => handleChange("projectDescription", e.target.value)} required />
                         
                         <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
-                        <button type="submit" className="submit-button">submit!</button>
+                        <p></p>
+                        <p></p>
+                        <button type="submit" className="submit-button">
+                            submit!
+                            <img src={contactFieldLineArrow} alt="Submit Arrow" />
+                        </button>
                     </form>
 
                     {submitted && <p className="thank-you-message">thank you! if you need to add detail, feel free to submit another form.</p>}
