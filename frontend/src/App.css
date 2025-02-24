@@ -584,8 +584,6 @@ input:focus {
   max-width: none; /* Prevent max-width constraints */
 }
 
-
-
 /* ✅ Right Column */
 .contact-right {
   width: 67%;

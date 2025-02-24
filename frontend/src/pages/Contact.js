@@ -148,16 +148,13 @@ function Contact() {
                         <p className="contact-intro">
                             darion d’anjou provides visual development for and production of narrative films, commercials, music videos, games, digital experiences, and apps, as well as creative and technical training and consultation
                         </p>
-                    </div>
-
-
-                    {showTrainingOptions && (
+                        {showTrainingOptions && (
                         <div className="training-info">
                             <img src={promoImage} alt="Training Promo" className="promo-image" />
                             <p>{trainingDescription}</p> {/* Dynamically update text */}
                         </div>
-                    )}
-
+                    )}                        
+                    </div>
 
                     <p className="contact-footer">
                         darion d’anjou is an ai powered creative studio that leverages the latest in technology to deliver best of class creative and technology solutions
