@@ -143,10 +143,13 @@ function Contact() {
         <>
             <div className="contact-container">
                 <div className="contact-left">
-                    <img src={titleContact} alt="Contact Title" className="title-contact-image" />
-                    <p className="contact-intro">
-                        darion d’anjou provides visual development for and production of narrative films, commercials, music videos, games, digital experiences, and apps, as well as creative and technical training and consultation
-                    </p>
+                    <div className="contact-title-wrapper">
+                        <img src={titleContact} alt="Contact Title" className="title-contact-image" />
+                        <p className="contact-intro">
+                            darion d’anjou provides visual development for and production of narrative films, commercials, music videos, games, digital experiences, and apps, as well as creative and technical training and consultation
+                        </p>
+                    </div>
+
 
                     {showTrainingOptions && (
                         <div className="training-info">
@@ -212,11 +215,21 @@ function Contact() {
 
                         <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
                         <p></p>
-                        <input type="text" name="projectSubject" value={formData.projectSubject} placeholder="working title for your project" onChange={(e) => handleChange("projectSubject", e.target.value)} required />
-                        <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
+                        {showTrainingOptions ? (
+                            <div className="calendly-widget">
+                                <iframe src="https://calendly.com/dariondanjou/training-session" width="100%" height="240px" frameBorder="0"></iframe>
+                            </div>
+                        ) : (
+                            <>
+                                <input type="text" name="projectSubject" value={formData.projectSubject} placeholder="working title for your project" onChange={(e) => handleChange("projectSubject", e.target.value)} required />
+                                <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
 
-                        <textarea name="projectDescription" className="project-description" value={formData.projectDescription} placeholder="tell us more about your project" onChange={(e) => handleChange("projectDescription", e.target.value)} required />
-                        <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
+                                <textarea name="projectDescription" className="project-description" value={formData.projectDescription} placeholder="tell us more about your project" onChange={(e) => handleChange("projectDescription", e.target.value)} required />
+                                <img src={contactFieldLine} alt="Field Separator" className="contact-field-line" />
+
+                            </>
+                        )}
+
                         <p></p>
                         <p></p>
                         <button type="submit" className="submit-button">

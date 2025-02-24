@@ -552,24 +552,25 @@ input:focus {
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* ✅ Two-Column Layout Adjustments */
 .contact-container {
   display: flex;
   flex-direction: row;
   align-items: stretch;
   justify-content: center;
-  height: 80vh;
+  height: calc(100vh - 70px); /* Full height minus navbar */
   width: 80%;
   margin: auto;
 }
+
 
 .contact-left {
   width: 33%;
   padding: 0 20px; /* Remove padding at the top */
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Aligns content at the top */
+  justify-content: space-between; /* Aligns content at the top */
   text-align: right;
+  height: calc(100vh - 70px); /* Full height minus navbar */
 }
 
 .title-contact-image {
@@ -603,6 +604,8 @@ input:focus {
   color: rgba(255, 255, 255, 0.8);
   margin-top: -10px; /* ✅ Moves text closer to title */
   padding-top: 0;
+  position: relative;
+  top: 0;
 }
 
 
@@ -612,7 +615,9 @@ input:focus {
   font-weight: 400;
   color: rgba(255, 255, 255, 0.5);
   margin-bottom: 0;
+  padding-bottom: 20px; /* Adds spacing above the footer */
 }
+
 
 /* Dropdown background and text */
 .contact-form select {
@@ -727,8 +732,12 @@ textarea::-webkit-scrollbar-button:decrement {
   text-align: right;
   font-size: 14px;
   color: white;
-  margin-top: 20px;
+  margin-top: 10px; /* Adjust spacing to move it closer */
+  padding-top: 0;
+  position: relative;
+  top: 0;
 }
+
 
 
 /* ✅ Training Image */
@@ -739,9 +748,20 @@ textarea::-webkit-scrollbar-button:decrement {
 }
 
 .calendly-widget {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   color: white;
   margin-top: 10px;
+}
+
+.calendly-widget iframe {
+  border: none;
+  width: 100%;
+  height: 240px;
+  max-width: 100%;
 }
 
 /* Submit Button */
