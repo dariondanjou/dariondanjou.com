@@ -23,6 +23,11 @@ html, body {
   font-family: 'Roboto Mono', monospace !important;
 }
 
+input:focus {
+  outline: none;
+  border: none; /* Optional: If you want to remove any existing border */
+}
+
 
 /* ✅ Ensures the Contact Page is Centered */
 .page-wrapper {
@@ -234,7 +239,7 @@ html, body {
   font-size: 14px;
   padding: 8px;
   width: 290px;
-  border: 1px solid white;
+  border: none;
   background: transparent;
   color: white;
   outline: none;
@@ -567,6 +572,18 @@ html, body {
   text-align: right;
 }
 
+.title-contact-image {
+  width: 170%; /* Increase size to 150% */
+  height: auto; /* Maintain aspect ratio */
+  position: relative;
+  top: 0; 
+  right: 252px;
+  margin-top: -8vh;
+  margin-right: -4vw; 
+  max-width: none; /* Prevent max-width constraints */
+}
+
+
 
 /* ✅ Right Column */
 .contact-right {
@@ -598,7 +615,8 @@ html, body {
   cursor: pointer;
   background-color: black; /* Dropdown background */
   color: white; /* Text color */
-  border: 1px solid white;
+  /*border: 1px solid white;*/
+  border: none; /* ✅ Prevents border from appearing */
 }
 
 /* Dropdown options background and text */
@@ -619,12 +637,15 @@ html, body {
 .contact-form select option:focus {
   background-color: #333333 !important; /* Dark gray highlight */
   color: white;
+  border: none; /* ✅ Prevents border from appearing */
+  outline: none; /* ✅ Ensures no default focus highlight */
+  box-shadow: none; /* ✅ Prevents glow effects */
 }
 
 .contact-form input, .contact-form select, .contact-form textarea {
   background: transparent;
+  /*border-bottom: 1px dotted white;*/
   border: none;
-  border-bottom: 1px solid white;
   color: white;
   padding: 10px;
   width: 100%;
@@ -640,6 +661,13 @@ html, body {
 .contact-form select, 
 .contact-form button {
   font-family: 'Roboto Mono', monospace !important;
+}
+
+
+.contact-field-line {
+  width: 100%;
+  height: auto;
+  margin-top: 5px;
 }
 
 
@@ -701,11 +729,11 @@ html, body {
   position: relative;
   width: 100%;
   background: black;
-  border: 1px solid white;
+  border: none;
   cursor: pointer;
   font-size: 16px;
   color: white;
-  padding: 10px;
+  padding-top: 10px;
   text-align: left;
 }
 
@@ -714,7 +742,7 @@ html, body {
   background: black;
   color: white;
   padding: 10px;
-  border: 1px solid white;
+  border: none;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -742,7 +770,7 @@ html, body {
   padding: 0;
   margin: 0;
   background: black;
-  border: 1px solid white;
+  border: none;
   position: absolute;
   width: 100%;
   z-index: 1000;
@@ -763,7 +791,7 @@ html, body {
   padding: 0;
   margin: 0;
   background: black;
-  border: 1px solid white;
+  border: none;
   position: absolute;
   width: 100%;
   z-index: 1000;
