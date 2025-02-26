@@ -45,8 +45,6 @@ input:focus {
   padding-bottom: 70px; /* Space for navbar */
 }
 
-
-
 /* ✅ Infinite Scrolling Gallery */
 .gallery-container {
   height: 100vh;
@@ -597,13 +595,16 @@ input:focus {
 
 .contact-intro {
   text-align: right;
+  align-items: right;
   font-size: 16px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.8);
   margin-top: -10px; /* ✅ Moves text closer to title */
   padding-top: 0;
+  padding-bottom: 20px;
   position: relative;
   top: 0;
+  width: 100%;
 }
 
 
@@ -722,21 +723,177 @@ textarea::-webkit-scrollbar-button:decrement {
   background: white; /* White top and bottom arrows */
 }
 
+.training-header {
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start; 
+}
 
-
-
-/* ✅ Ensures proper spacing for training info */
-.training-info {
-  text-align: right;
-  font-size: 14px;
+.training-title {
+  text-align: left;
+  font-size: 20px;
+  font-weight: 700;
   color: white;
-  margin-top: 10px; /* Adjust spacing to move it closer */
-  padding-top: 0;
-  position: relative;
-  top: 0;
+  margin-bottom: 10px;
+  padding-left: 20px; /* Align left with spacing */
+}
+
+.training-title label {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.training-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
 }
 
 
+.training-action-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.training-price-book {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: left;
+}
+
+.training-price {
+  font-weight: bold;
+  font-size: 16px;
+  text-align: left;
+}
+
+.training-book-link {
+  font-size: 14px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+.training-book-link-text {
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.training-book-link-text:hover {
+  text-decoration: none;
+}
+
+.training-arrow-book {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.training-arrow-book img {
+  height: 16px;
+  width: auto;
+}
+
+.training-book {
+  text-align: right;
+  flex-grow: 1;
+}
+
+.training-book img {
+  width: 12px;
+  height: auto;
+  margin-left: 5px;
+}
+
+.training-book:hover {
+  text-decoration: none;
+}
+
+.training-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.training-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+}
+
+.training-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.training-information-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 20px;
+  width: 100%;
+}
+
+.training-image {
+  flex: 0 0 250px;
+  max-width: 250px;
+}
+
+.training-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.training-item div {
+  display: flex;
+  flex-direction: column;
+}
+
+.training-item label {
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+}
+
+.training-item p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.training-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.training-book {
+  font-size: 14px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.training-book:hover {
+  text-decoration: underline;
+}
 
 /* ✅ Training Image */
 .promo-image {
@@ -782,6 +939,27 @@ textarea::-webkit-scrollbar-button:decrement {
 .submit-button img {
   width: auto; /* Size the arrow */
   height: auto;
+}
+
+.submit-button-left img {
+  width: 460px; /* Size the arrow */
+  height: auto;
+}
+
+.submit-button-left {
+  background: transparent; /* Remove background */
+  color: white; /* Ensure text is white */
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: left;
+  width: 50%;
+  padding: 0;
+  display: flex;
+  align-items: right;
+  gap: 10px; /* Space between text and arrow */
+  margin-right: 16px;
 }
 
 

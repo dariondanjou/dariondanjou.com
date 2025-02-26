@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import axios from "axios";
 import "../App.css";
+import { useLocation } from "react-router-dom";
+
 
 const BASE_IMAGE_URL = process.env.REACT_APP_IMAGE_BASE_URL;
 
@@ -21,14 +23,36 @@ const twinkles = `${BASE_IMAGE_URL}/twinkles.png`;
 
 
 function Contact() {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const trainingQuery = queryParams.get("training");    
+    
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        projectType: "narrative film",
+        projectType: trainingQuery ? "training" : "narrative film", // Default to "narrative film" if no training query
         projectSubject: "",
         projectDescription: "",
-        trainingType: "midjourney quickstart (1 hour one-on-one $250)",
+        trainingType: trainingQuery || "", // Pre-select training if available, otherwise leave blank
     });
+    
+
+    useEffect(() => {
+        if (trainingQuery) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                projectType: "training",
+                trainingType: trainingQuery
+            }));
+            setShowTrainingOptions(true);
+            setShowCalendly(true);
+            setTrainingDropdownOpen(false); // Ensures training dropdown is collapsed
+            setPromoImage(trainingOptions[trainingQuery]); // Updates the training image
+            setTrainingDescription(trainingDescriptions[trainingQuery]); // Updates the training description
+        }
+    }, [trainingQuery]);
+    
+    
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [trainingDropdownOpen, setTrainingDropdownOpen] = useState(false);
@@ -53,7 +77,8 @@ function Contact() {
         "ai filmmaking quickstart (1 hour one-on-one $250)": `${BASE_IMAGE_URL}/image%20(96).png`,
         "ai filmmaking quickstart (2 hour group $50)": `${BASE_IMAGE_URL}/image%20(18).png`,
         "custom consultation (1 hour one-on-one $250)": `${BASE_IMAGE_URL}/image%20(15).png`,
-        "10 minute free consultation (one-on-one $0)": `${BASE_IMAGE_URL}/image%20(10).png`
+        "10 minute free consultation (one-on-one $0)": `${BASE_IMAGE_URL}/image%20(10).png`,
+        "1 hour free group demo ($0)": `${BASE_IMAGE_URL}/image%20(19).png`
     };
 
     const trainingDescriptions = {
@@ -62,7 +87,8 @@ function Contact() {
         "ai filmmaking quickstart (1 hour one-on-one $250)": "A private AI filmmaking training session covering automated video creation and storytelling.",
         "ai filmmaking quickstart (2 hour group $50)": "A collaborative session for learning AI filmmaking techniques with a group.",
         "custom consultation (1 hour one-on-one $250)": "Tailored one-on-one consulting to address your specific AI creative workflow needs.",
-        "10 minute free consultation (one-on-one $0)": "A quick free consultation to discuss AI creativity and see how we can help."
+        "10 minute free consultation (one-on-one $0)": "A quick free consultation to discuss AI creativity and see how we can help.",
+        "1 hour free group demo ($0)": "A one hour group demonstration of the creative possibilities available using the latest AI tools."
     };
 
     const [trainingDescription, setTrainingDescription] = useState(trainingDescriptions["midjourney quickstart (1 hour one-on-one $250)"]);    

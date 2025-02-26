@@ -81,26 +81,26 @@ function Training() {
           type: "(1-on-1)",
           description: "From total beginner to making stunning images in Midjourney, in one hour. Learn the latest professional tips. Via Zoom.",
           price: "USD $250 /hr",
-          img: imgTrainingMidjourneyQuickstartOneOnOne,
-          link: `/contact?training=midjourney quickstart (1 hour one-on-one $250)`
+          img: `${BASE_IMAGE_URL}/image%20(22).png`,
+          link: "/contact"
         },
         {
           title: "ai filmmaking quickstart",
           type: "(1-on-1)",
           description: "Learn end-to-end professional AI filmmaking workflow, in one hour. Assumes basic Midjourney knowledge. Via Zoom.",
           price: "USD $250 /hr",
-          img: imgTrainingAIFilmmakingQuickstartOneOnOne,
-          link: `/contact?training=ai filmmaking quickstart (1 hour one-on-one $250)`
+          img: `${BASE_IMAGE_URL}/image%20(96).png`,
+          link: "/contact"
         },
         {
           title: "custom consultation",
           type: "(1-on-1)",
           description: "Get targeted help on a specific skill or for a specific project. Session customized to your need. Via Zoom.",
           price: "USD $250 /hr",
-          img: imgTrainingCustomConsultation,
-          link: `/contact?training=custom consultation (1 hour one-on-one $250)`
+          img: `${BASE_IMAGE_URL}/image%20(15).png`,
+          link: "/contact"
         }
-    ];
+      ];
 
 
     return (
@@ -113,36 +113,24 @@ function Training() {
                             <p className="contact-intro">
                                 darion d’anjou provides visual development for and production of narrative films, commercials, music videos, games, digital experiences, and apps, as well as creative and technical training and consultation
                             </p>
-                            <p></p>
-                            <p></p>
-                            <p className="contact-intro">
+                            <p>
                                 choose a training that suits your goals or let's crafta custom training for you!
                             </p>
-                            <p className="contact-intro"></p>
-                            <p className="contact-intro"></p>
-                            <p className="contact-intro">
-                                not sure where to start?
-                            </p>                                                        
                         </div>
                         <div className="training-info">
-                            <a href="/contact?training=10 minute free consultation (one-on-one $0)">
-                                <button type="submit-training-left" className="submit-button-left">
-                                    <p className="submit-button-left-training">
-                                        book 10 minutes free consultation<br></br>
-                                        <img src={contactFieldLineArrow} alt="Submit Arrow" /><br></br>
-                                    </p>
-                                </button>
-                            </a>
-                            <a href="/contact?training=1 hour free group demo ($0)">
-                                <button type="submit-training-left" className="submit-button-left">
-                                    <p className="submit-button-left-training">
-                                        book 1 hour free group demo<br></br>
-                                        <img src={contactFieldLineArrow} alt="Submit Arrow" /><br></br>   
-                                    </p>
-                                </button>
-                            </a>
-                        </div>
-                     
+                            <p></p>
+                            <p></p>
+                            <p>
+                                not sure where to start?
+                            </p>
+                            <button type="submit" className="submit-button">
+                                book 10 minutes free consultation<br></br>
+                                <img src={contactFieldLineArrow} alt="Submit Arrow" />
+                                <p></p>
+                                book 1 hour free gruop demo<br></br>
+                                <img src={contactFieldLineArrow} alt="Submit Arrow" />
+                            </button>
+                        </div>                     
                     </div>
                     <div className="contact-footer">
                         <p className="contact-footer">
@@ -153,43 +141,76 @@ function Training() {
                 </div>
 
                 <div className="contact-right">
-
+                    <div>
                         <div className="training-items-list">
-                            {trainingData.map((training, index) => (
-                                <div key={index} className="training-item">
-                                    <div className="training-information-container">
-                                        <div className="training-image">
-                                            <img src={training.img} alt={training.title} className="promo-image" />
-                                        </div>
-                                    
-                                        <div className="training-info">
-                                            <div className="training-header">
-                                                <span><label>{training.title}</label> <label>{training.type}</label></span>
-                                            </div>
-                                            <div>
-                                                <p className="training-description">{training.description}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="training-action-container">
-                                        <div className="training-price-book">        
-                                                <div className="training-price">{training.price}</div>
-                                                <div className="training-book">
-                                                    <a href={training.link} className="training-book-link-text">
-                                                        book this one-on-one training!
-                                                    </a>
-                                                </div>
-                                        </div>
-                                        <div className="training-arrow-book">
-                                            <a href={training.link} className="training-book-link-arrow">
-                                                <img src={contactFieldLineArrow} alt="Arrow" />
-                                            </a>                                            
-                                        </div>
-                                    </div>
+                            <div className="training-item">
+                                <div>
+                                    <img src={imgTrainingMidjourneyQuickstartOneOnOne} alt="Training Promo" className="promo-image" />
                                 </div>
-                            ))}
+                                <div>
+                                    <div><label>midjourney quickstart</label><label>(1-on-1)</label></div>
+                                    <div>
+                                        <p>
+                                            from total beginner to making stunning images in midjourney, in one hour. learn the latest professional tips. via zoom
+                                        </p>
+                                    </div>
+                                </div>                            
+                            </div>
+                            <div>
+                                <p></p>
+                                <p></p>
+                                <div><label>USD $250 /hr ^</label></div>
+                                <button type="submit" className="submit-button">
+                                    book this one-on-one training!<br></br>
+                                    <img src={contactFieldLineArrow} alt="Submit Arrow" />
+                                </button>
+                            </div>
+                            <div className="training-item">
+                                <div>
+                                    <img src={imgTrainingAIFilmmakingQuickstartOneOnOne} alt="Training Promo" className="promo-image" />
+                                </div>
+                                <div>
+                                    <div><label>ai filmmaking quickstart</label><label>(1-on-1)</label></div>
+                                    <div>
+                                        <p>
+                                            from total beginner to making stunning images in midjourney, in one hour. learn the latest professional tips. via zoom
+                                        </p>
+                                    </div>
+                                </div>                            
+                            </div>
+                            <div>
+                                <p></p>
+                                <p></p>
+                                <div><label>USD $250 /hr ^</label></div>
+                                <button type="submit" className="submit-button">
+                                    book this one-on-one training!<br></br>
+                                    <img src={contactFieldLineArrow} alt="Submit Arrow" />
+                                </button>
+                            </div>
+                            <div className="training-item">
+                                <div>
+                                    <img src={imgTraining10MinuteFreeConsultationOneOnOne} alt="Training Promo" className="promo-image" />
+                                </div>
+                                <div>
+                                    <div><label>custom consultation</label><label>(1-on-1)</label></div>
+                                    <div>
+                                        <p>
+                                            from total beginner to making stunning images in midjourney, in one hour. learn the latest professional tips. via zoom
+                                        </p>
+                                    </div>
+                                </div>                            
+                            </div>
+                            <div>
+                                <p></p>
+                                <p></p>
+                                <div><label>USD $250 /hr ^</label></div>
+                                <button type="submit" className="submit-button">
+                                    book this one-on-one training!<br></br>
+                                    <img src={contactFieldLineArrow} alt="Submit Arrow" />
+                                </button>
+                            </div>                                                        
                         </div>
-
+                    </div>
                 </div>
             </div>
         </>
