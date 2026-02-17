@@ -391,6 +391,11 @@ input:focus {
   top: -1px;
 }
 
+.nav-right a:nth-child(7) {
+  position: relative;
+  top: -1px;
+}
+
 /* ✅ Button styled as link (replaces anchor tags with href="#") */
 .nav-link-button {
   background: none;
