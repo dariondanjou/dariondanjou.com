@@ -1,15 +1,16 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "dariondanjou-com",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.743.0",
+    "@aws-sdk/s3-request-presigner": "^3.743.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
-    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
-    "cra-template": "1.2.0",
-    "multer-s3": "^3.0.1",
+    "mongoose": "^8.10.1",
+    "nodemailer": "^6.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.3.5",
@@ -18,7 +19,7 @@
     "web-vitals": "^4.2.4"
   },
   "scripts": {
-    "start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
