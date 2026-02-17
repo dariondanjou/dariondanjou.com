@@ -13,9 +13,9 @@ module.exports = async function handler(req, res) {
   try {
     const supabase = getSupabaseAdmin();
 
-    // Check if already subscribed
+    // Check if already exists in fans table
     const { data: existing } = await supabase
-      .from("subscribers")
+      .from("fans")
       .select("id")
       .eq("email", email)
       .single();
@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
     }
 
     const { error } = await supabase
-      .from("subscribers")
+      .from("fans")
       .insert({ email });
 
     if (error) throw error;

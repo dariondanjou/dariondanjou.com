@@ -1,6 +1,22 @@
 const getSupabaseAdmin = require("../_lib/supabase");
 const requireAuth = require("../_lib/auth");
 
+// Map camelCase field names from frontend to snake_case DB columns
+const fieldMap = {
+  firstName: "first_name",
+  lastName: "last_name",
+  fanNumber: "fan_number",
+  phoneVerified: "phone_verified",
+};
+
+function toDbFields(body) {
+  const mapped = {};
+  for (const [key, value] of Object.entries(body)) {
+    mapped[fieldMap[key] || key] = value;
+  }
+  return mapped;
+}
+
 module.exports = async function handler(req, res) {
   const { id } = req.query;
   const supabase = getSupabaseAdmin();
@@ -11,15 +27,25 @@ module.exports = async function handler(req, res) {
 
     try {
       const { data, error } = await supabase
-        .from("subscribers")
-        .update(req.body)
+        .from("fans")
+        .update(toDbFields(req.body))
         .eq("id", id)
         .select()
         .single();
 
       if (error) throw error;
 
-      return res.json({ ...data, _id: data.id });
+      return res.json({
+        _id: data.id,
+        id: data.id,
+        email: data.email,
+        firstName: data.first_name || "",
+        lastName: data.last_name || "",
+        phone: data.phone || "",
+        fanNumber: data.fan_number,
+        phoneVerified: data.phone_verified,
+        created_at: data.created_at,
+      });
     } catch (error) {
       return res.status(500).json({ error: "Failed to update subscriber" });
     }
@@ -31,7 +57,7 @@ module.exports = async function handler(req, res) {
 
     try {
       const { error } = await supabase
-        .from("subscribers")
+        .from("fans")
         .delete()
         .eq("id", id);
 

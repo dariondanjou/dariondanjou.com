@@ -8,12 +8,23 @@ module.exports = async function handler(req, res) {
 
     try {
       const supabase = getSupabaseAdmin();
-      const { data, error } = await supabase.from("subscribers").select("*");
+      const { data, error } = await supabase.from("fans").select("*");
 
       if (error) throw error;
 
-      const subscribers = data.map((sub) => ({ ...sub, _id: sub.id }));
-      return res.json(subscribers);
+      // Map snake_case DB columns to camelCase for frontend
+      const fans = data.map((fan) => ({
+        _id: fan.id,
+        id: fan.id,
+        email: fan.email,
+        firstName: fan.first_name || "",
+        lastName: fan.last_name || "",
+        phone: fan.phone || "",
+        fanNumber: fan.fan_number,
+        phoneVerified: fan.phone_verified,
+        created_at: fan.created_at,
+      }));
+      return res.json(fans);
     } catch (error) {
       return res.status(500).json({ error: "Failed to fetch subscribers" });
     }

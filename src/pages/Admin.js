@@ -231,7 +231,7 @@ function Admin() {
 
                 <div className="admin-nav">
                     <button onClick={() => setView("images")} className={view === "images" ? "active" : ""}>Manage Images</button>
-                    <button onClick={() => setView("users")} className={view === "users" ? "active" : ""}>Manage Users</button>
+                    <button onClick={() => setView("users")} className={view === "users" ? "active" : ""}>Manage Fans</button>
                 </div>
 
                 {view === "images" && (
@@ -278,7 +278,7 @@ function Admin() {
 
                 {view === "users" && (
                     <>
-                        <h2>Subscribed Users</h2>
+                        <h2>Fans</h2>
                         <table className="user-table">
                             <thead>
                                 <tr>
@@ -286,7 +286,6 @@ function Admin() {
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Phone</th>
-                                    <th>Subscribed</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -294,10 +293,9 @@ function Admin() {
                                 {users.map((user) => (
                                     <tr key={user._id}>
                                         <td>{user.email}</td>
-                                        <td><input type="text" value={user.firstName} onChange={(e) => handleUpdateUser(user._id, "firstName", e.target.value)} /></td>
-                                        <td><input type="text" value={user.lastName} onChange={(e) => handleUpdateUser(user._id, "lastName", e.target.value)} /></td>
-                                        <td><input type="text" value={user.phone} onChange={(e) => handleUpdateUser(user._id, "phone", e.target.value)} /></td>
-                                        <td>{user.subscribed ? "Yes" : "No"}</td>
+                                        <td><input type="text" value={user.firstName || ""} onChange={(e) => handleUpdateUser(user._id, "firstName", e.target.value)} /></td>
+                                        <td><input type="text" value={user.lastName || ""} onChange={(e) => handleUpdateUser(user._id, "lastName", e.target.value)} /></td>
+                                        <td><input type="text" value={user.phone || ""} onChange={(e) => handleUpdateUser(user._id, "phone", e.target.value)} /></td>
                                         <td><button onClick={() => handleDeleteUser(user._id)} className="delete-button">Delete</button></td>
                                     </tr>
                                 ))}
