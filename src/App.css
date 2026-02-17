@@ -380,6 +380,12 @@ input:focus {
   cursor: pointer;
 }
 
+/* ✅ Anchor and button wrappers in nav-right - consistent alignment */
+.nav-right a {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* ✅ Button styled as link (replaces anchor tags with href="#") */
 .nav-link-button {
   background: none;
