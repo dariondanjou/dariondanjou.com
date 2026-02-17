@@ -11,7 +11,7 @@ function Home() {
     const containerRef = useRef(null);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/images")
+        axios.get("/api/images")
             .then(response => {
                 setImages(response.data);
                 setVirtualImages([...response.data, ...response.data]);

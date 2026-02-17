@@ -19,7 +19,7 @@ function Admin() {
     // Fetch images
     const fetchImages = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/images");
+            const response = await axios.get("/api/images");
             setImages(response.data);
         } catch (error) {
             console.error("Error fetching images:", error);
@@ -29,7 +29,7 @@ function Admin() {
     // Fetch users
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/subscribers");
+            const response = await axios.get("/api/subscribers");
             setUsers(response.data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -42,7 +42,7 @@ function Admin() {
             const updatedImage = { ...images.find(img => img._id === id), [field]: value };
             setImages(images.map(img => (img._id === id ? updatedImage : img)));
 
-            await axios.put(`http://localhost:5000/api/images/${id}`, { [field]: value });
+            await axios.put(`/api/images/${id}`, { [field]: value });
         } catch (error) {
             console.error("Error updating image:", error);
         }
@@ -52,7 +52,7 @@ function Admin() {
     const handleDeleteImage = async (id) => {
         if (!window.confirm("Are you sure you want to delete this image?")) return;
         try {
-            await axios.delete(`http://localhost:5000/api/images/${id}`);
+            await axios.delete(`/api/images/${id}`);
             setImages(images.filter(image => image._id !== id));
         } catch (error) {
             console.error("Error deleting image:", error);
@@ -65,7 +65,7 @@ function Admin() {
             const updatedUser = { ...users.find(user => user._id === id), [field]: value };
             setUsers(users.map(user => (user._id === id ? updatedUser : user)));
 
-            await axios.put(`http://localhost:5000/api/subscribers/${id}`, { [field]: value });
+            await axios.put(`/api/subscribers/${id}`, { [field]: value });
         } catch (error) {
             console.error("Error updating user:", error);
         }
@@ -75,29 +75,40 @@ function Admin() {
     const handleDeleteUser = async (id) => {
         if (!window.confirm("Are you sure you want to delete this user?")) return;
         try {
-            await axios.delete(`http://localhost:5000/api/subscribers/${id}`);
+            await axios.delete(`/api/subscribers/${id}`);
             setUsers(users.filter(user => user._id !== id));
         } catch (error) {
             console.error("Error deleting user:", error);
         }
     };
 
-    // Drag and Drop Upload
+    // Drag and Drop Upload (presigned URL flow)
     const onDrop = useCallback(async (acceptedFiles) => {
         setUploading(true);
         setMessage("Uploading images...");
 
-        const formData = new FormData();
-        acceptedFiles.forEach((file) => {
-            formData.append("images", file);
-        });
-
         try {
-            const response = await axios.post("http://localhost:5000/api/upload-multiple", formData, {
-                headers: { "Content-Type": "multipart/form-data" }
-            });
+            for (const file of acceptedFiles) {
+                // 1. Get presigned URL
+                const { data } = await axios.post("/api/upload", {
+                    filename: file.name,
+                    contentType: file.type,
+                });
 
-            setMessage(response.data.message);
+                // 2. Upload directly to S3
+                await fetch(data.presignedUrl, {
+                    method: "PUT",
+                    body: file,
+                    headers: { "Content-Type": file.type },
+                });
+
+                // 3. Confirm upload and save metadata
+                await axios.post("/api/upload-confirm", {
+                    fileUrl: data.fileUrl,
+                });
+            }
+
+            setMessage(`Uploaded ${acceptedFiles.length} image(s) successfully!`);
             await fetchImages();
         } catch (error) {
             console.error("Error uploading images:", error);
