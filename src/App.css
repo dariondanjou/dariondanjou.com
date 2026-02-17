@@ -397,6 +397,79 @@ input:focus {
   opacity: 1; /* Full visibility on hover */
 }
 
+/* Login Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 70px);
+}
+
+.login-form h1 {
+  margin-bottom: 20px;
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 300px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 14px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 10px;
+  background: white;
+  color: black;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.login-form button:hover {
+  background: #ddd;
+}
+
+.login-error {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Admin Header */
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.logout-button {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-button:hover {
+  color: white;
+  border-color: white;
+}
+
 /* ✅ Dropzone Styling (Preserved) */
 .dropzone {
   border: 2px dashed #ccc;

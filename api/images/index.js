@@ -1,12 +1,14 @@
-const connectToDatabase = require("../_lib/mongodb");
-const { Image } = require("../_lib/models");
+const getSupabaseAdmin = require("../_lib/supabase");
 
 module.exports = async function handler(req, res) {
-  await connectToDatabase();
-
   if (req.method === "GET") {
     try {
-      const images = await Image.find();
+      const supabase = getSupabaseAdmin();
+      const { data, error } = await supabase.from("images").select("*");
+
+      if (error) throw error;
+
+      const images = data.map((img) => ({ ...img, _id: img.id }));
       return res.json(images);
     } catch (error) {
       return res.status(500).json({ error: "Failed to fetch images" });

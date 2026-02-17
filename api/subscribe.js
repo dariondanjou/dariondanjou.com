@@ -1,12 +1,9 @@
-const connectToDatabase = require("./_lib/mongodb");
-const { Subscriber } = require("./_lib/models");
+const getSupabaseAdmin = require("./_lib/supabase");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-
-  await connectToDatabase();
 
   const { email } = req.body;
   if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -14,13 +11,25 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const existingSubscriber = await Subscriber.findOne({ email });
-    if (existingSubscriber) {
+    const supabase = getSupabaseAdmin();
+
+    // Check if already subscribed
+    const { data: existing } = await supabase
+      .from("subscribers")
+      .select("id")
+      .eq("email", email)
+      .single();
+
+    if (existing) {
       return res.status(409).json({ error: "Email already subscribed" });
     }
 
-    const newSubscriber = new Subscriber({ email });
-    await newSubscriber.save();
+    const { error } = await supabase
+      .from("subscribers")
+      .insert({ email });
+
+    if (error) throw error;
+
     return res.json({ message: "Subscribed successfully!" });
   } catch (error) {
     return res.status(500).json({ error: "Internal server error" });

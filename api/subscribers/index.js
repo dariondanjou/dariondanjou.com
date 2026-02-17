@@ -1,12 +1,18 @@
-const connectToDatabase = require("../_lib/mongodb");
-const { Subscriber } = require("../_lib/models");
+const getSupabaseAdmin = require("../_lib/supabase");
+const requireAuth = require("../_lib/auth");
 
 module.exports = async function handler(req, res) {
-  await connectToDatabase();
-
   if (req.method === "GET") {
+    const user = await requireAuth(req, res);
+    if (!user) return;
+
     try {
-      const subscribers = await Subscriber.find();
+      const supabase = getSupabaseAdmin();
+      const { data, error } = await supabase.from("subscribers").select("*");
+
+      if (error) throw error;
+
+      const subscribers = data.map((sub) => ({ ...sub, _id: sub.id }));
       return res.json(subscribers);
     } catch (error) {
       return res.status(500).json({ error: "Failed to fetch subscribers" });

@@ -1,21 +1,82 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
+import { createClient } from "@supabase/supabase-js";
 import NavBar from "../components/NavBar";
 import "../App.css";
 
+const supabase = createClient(
+    process.env.REACT_APP_SUPABASE_URL,
+    process.env.REACT_APP_SUPABASE_ANON_KEY
+);
+
 function Admin() {
+    const [session, setSession] = useState(null);
+    const [authLoading, setAuthLoading] = useState(true);
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+    const [loginError, setLoginError] = useState("");
+
     const [images, setImages] = useState([]);
     const [users, setUsers] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [view, setView] = useState("images");
 
+    // Auth: check session on mount and listen for changes
     useEffect(() => {
-        fetchImages();
-        fetchUsers();
+        supabase.auth.getSession().then(({ data: { session: s } }) => {
+            setSession(s);
+            setAuthLoading(false);
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            (_event, s) => setSession(s)
+        );
+
+        return () => subscription.unsubscribe();
     }, []);
 
-    // Fetch images
+    // Create authenticated axios instance
+    const authAxios = useCallback(() => {
+        if (!session) return axios;
+        return axios.create({
+            headers: {
+                Authorization: `Bearer ${session.access_token}`,
+            },
+        });
+    }, [session]);
+
+    // Fetch data when session is available
+    useEffect(() => {
+        if (session) {
+            fetchImages();
+            fetchUsers();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [session]);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setLoginError("");
+
+        const { error } = await supabase.auth.signInWithPassword({
+            email: loginEmail,
+            password: loginPassword,
+        });
+
+        if (error) {
+            setLoginError(error.message);
+        }
+    };
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        setSession(null);
+        setImages([]);
+        setUsers([]);
+    };
+
+    // Fetch images (public endpoint, no auth needed)
     const fetchImages = async () => {
         try {
             const response = await axios.get("/api/images");
@@ -25,10 +86,10 @@ function Admin() {
         }
     };
 
-    // Fetch users
+    // Fetch users (auth required)
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("/api/subscribers");
+            const response = await authAxios().get("/api/subscribers");
             setUsers(response.data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -41,7 +102,7 @@ function Admin() {
             const updatedImage = { ...images.find(img => img._id === id), [field]: value };
             setImages(images.map(img => (img._id === id ? updatedImage : img)));
 
-            await axios.put(`/api/images/${id}`, { [field]: value });
+            await authAxios().put(`/api/images/${id}`, { [field]: value });
         } catch (error) {
             console.error("Error updating image:", error);
         }
@@ -51,7 +112,7 @@ function Admin() {
     const handleDeleteImage = async (id) => {
         if (!window.confirm("Are you sure you want to delete this image?")) return;
         try {
-            await axios.delete(`/api/images/${id}`);
+            await authAxios().delete(`/api/images/${id}`);
             setImages(images.filter(image => image._id !== id));
         } catch (error) {
             console.error("Error deleting image:", error);
@@ -64,7 +125,7 @@ function Admin() {
             const updatedUser = { ...users.find(user => user._id === id), [field]: value };
             setUsers(users.map(user => (user._id === id ? updatedUser : user)));
 
-            await axios.put(`/api/subscribers/${id}`, { [field]: value });
+            await authAxios().put(`/api/subscribers/${id}`, { [field]: value });
         } catch (error) {
             console.error("Error updating user:", error);
         }
@@ -74,26 +135,27 @@ function Admin() {
     const handleDeleteUser = async (id) => {
         if (!window.confirm("Are you sure you want to delete this user?")) return;
         try {
-            await axios.delete(`/api/subscribers/${id}`);
+            await authAxios().delete(`/api/subscribers/${id}`);
             setUsers(users.filter(user => user._id !== id));
         } catch (error) {
             console.error("Error deleting user:", error);
         }
     };
 
-    // Drag and Drop Upload (presigned URL flow)
+    // Drag and Drop Upload (presigned URL flow via Supabase Storage)
     const onDrop = useCallback(async (acceptedFiles) => {
         setUploading(true);
 
         try {
+            const api = authAxios();
             for (const file of acceptedFiles) {
-                // 1. Get presigned URL
-                const { data } = await axios.post("/api/upload", {
+                // 1. Get presigned upload URL
+                const { data } = await api.post("/api/upload", {
                     filename: file.name,
                     contentType: file.type,
                 });
 
-                // 2. Upload directly to S3
+                // 2. Upload directly to Supabase Storage
                 await fetch(data.presignedUrl, {
                     method: "PUT",
                     body: file,
@@ -101,7 +163,7 @@ function Admin() {
                 });
 
                 // 3. Confirm upload and save metadata
-                await axios.post("/api/upload-confirm", {
+                await api.post("/api/upload-confirm", {
                     fileUrl: data.fileUrl,
                 });
             }
@@ -112,14 +174,60 @@ function Admin() {
         } finally {
             setUploading(false);
         }
-    }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [session]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: "image/*", multiple: true });
+
+    if (authLoading) {
+        return (
+            <>
+                <div className="page-content">
+                    <p>Loading...</p>
+                </div>
+                <NavBar />
+            </>
+        );
+    }
+
+    if (!session) {
+        return (
+            <>
+                <div className="page-content">
+                    <div className="login-form">
+                        <h1>Admin Login</h1>
+                        <form onSubmit={handleLogin}>
+                            <input
+                                type="email"
+                                placeholder="email"
+                                value={loginEmail}
+                                onChange={(e) => setLoginEmail(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="password"
+                                placeholder="password"
+                                value={loginPassword}
+                                onChange={(e) => setLoginPassword(e.target.value)}
+                                required
+                            />
+                            <button type="submit">log in</button>
+                            {loginError && <p className="login-error">{loginError}</p>}
+                        </form>
+                    </div>
+                </div>
+                <NavBar />
+            </>
+        );
+    }
 
     return (
         <>
             <div className="page-content">
-                <h1>Admin Panel</h1>
+                <div className="admin-header">
+                    <h1>Admin Panel</h1>
+                    <button onClick={handleLogout} className="logout-button">log out</button>
+                </div>
 
                 <div className="admin-nav">
                     <button onClick={() => setView("images")} className={view === "images" ? "active" : ""}>Manage Images</button>

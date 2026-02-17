@@ -1,12 +1,13 @@
-const connectToDatabase = require("./_lib/mongodb");
-const { Image } = require("./_lib/models");
+const getSupabaseAdmin = require("./_lib/supabase");
+const requireAuth = require("./_lib/auth");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  await connectToDatabase();
+  const user = await requireAuth(req, res);
+  if (!user) return;
 
   const { fileUrl } = req.body;
   if (!fileUrl) {
@@ -14,11 +15,18 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const newImage = new Image({ url: fileUrl });
-    await newImage.save();
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from("images")
+      .insert({ url: fileUrl })
+      .select()
+      .single();
+
+    if (error) throw error;
+
     return res.json({
       message: "Image saved successfully",
-      imageId: newImage._id,
+      imageId: data.id,
       fileUrl,
     });
   } catch (error) {
