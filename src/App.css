@@ -393,7 +393,7 @@ input:focus {
 
 .nav-right a:nth-child(7) {
   position: relative;
-  top: -1px;
+  top: -2px;
 }
 
 /* ✅ Button styled as link (replaces anchor tags with href="#") */
