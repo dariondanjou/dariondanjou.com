@@ -380,8 +380,20 @@ input:focus {
   cursor: pointer;
 }
 
+/* ✅ Button styled as link (replaces anchor tags with href="#") */
+.nav-link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
 /* ✅ Fully Visible on Hover */
-.nav-right a:hover img.nav-icon {
+.nav-right a:hover img.nav-icon,
+.nav-right .nav-link-button:hover img.nav-icon {
   opacity: 1; /* Full visibility on hover */
 }
 

@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
-import NavBar from "../components/NavBar";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import axios from "axios";
 import "../App.css";
 import { useLocation } from "react-router-dom";
@@ -8,60 +7,32 @@ import { useLocation } from "react-router-dom";
 const BASE_IMAGE_URL = process.env.REACT_APP_IMAGE_BASE_URL;
 
 // Image constants
-const bookArrowFree10mins = `${BASE_IMAGE_URL}/book-arrow-free-10mins.png`;
-const bookArrowFreeDemo = `${BASE_IMAGE_URL}/book-arrow-free-demo.png`;
-const bookArrowOneOnOne = `${BASE_IMAGE_URL}/book-arrow-one-on-one.png`;
 const contactFieldLineDropdownArrow = `${BASE_IMAGE_URL}/contact-field-line-dropdownarrow.png`;
 const contactFieldLine = `${BASE_IMAGE_URL}/contact-field-line.png`;
 const contactFieldLineArrow = `${BASE_IMAGE_URL}/contact-field-line-arrow.png`;
-const logoDarionDanjou = `${BASE_IMAGE_URL}/logo-dariondanjou-creativityxtechnology.png`;
-const logoStillMoving = `${BASE_IMAGE_URL}/logo-stillmovinginteractive.png`;
-const scanlines = `${BASE_IMAGE_URL}/scanlines.png`;
 const titleContact = `${BASE_IMAGE_URL}/title-contact.png`;
-const titleTraining = `${BASE_IMAGE_URL}/title-training.png`;
-const twinkles = `${BASE_IMAGE_URL}/twinkles.png`;
 
 
 function Contact() {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const trainingQuery = queryParams.get("training");    
-    
+    const trainingQuery = queryParams.get("training");
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        projectType: trainingQuery ? "training" : "narrative film", // Default to "narrative film" if no training query
+        projectType: trainingQuery ? "training" : "narrative film",
         projectSubject: "",
         projectDescription: "",
-        trainingType: trainingQuery || "", // Pre-select training if available, otherwise leave blank
+        trainingType: trainingQuery || "",
     });
-    
 
-    useEffect(() => {
-        if (trainingQuery) {
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                projectType: "training",
-                trainingType: trainingQuery
-            }));
-            setShowTrainingOptions(true);
-            setShowCalendly(true);
-            setTrainingDropdownOpen(false); // Ensures training dropdown is collapsed
-            setPromoImage(trainingOptions[trainingQuery]); // Updates the training image
-            setTrainingDescription(trainingDescriptions[trainingQuery]); // Updates the training description
-        }
-    }, [trainingQuery]);
-    
-    
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [trainingDropdownOpen, setTrainingDropdownOpen] = useState(false);
     const [showTrainingOptions, setShowTrainingOptions] = useState(false);
-    const [showCalendly, setShowCalendly] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [promoImage, setPromoImage] = useState("");
-
-
 
     const dropdownRef = useRef(null);
     const trainingDropdownRef = useRef(null);
@@ -71,7 +42,7 @@ function Contact() {
         "website", "application", "training", "consultation", "other"
     ];
 
-    const trainingOptions = {
+    const trainingOptions = useMemo(() => ({
         "midjourney quickstart (1 hour one-on-one $250)": `${BASE_IMAGE_URL}/image%20(22).png`,
         "midjourney quickstart (2 hour group $50)": `${BASE_IMAGE_URL}/image%20(29).png`,
         "ai filmmaking quickstart (1 hour one-on-one $250)": `${BASE_IMAGE_URL}/image%20(96).png`,
@@ -79,9 +50,9 @@ function Contact() {
         "custom consultation (1 hour one-on-one $250)": `${BASE_IMAGE_URL}/image%20(15).png`,
         "10 minute free consultation (one-on-one $0)": `${BASE_IMAGE_URL}/image%20(10).png`,
         "1 hour free group demo ($0)": `${BASE_IMAGE_URL}/image%20(19).png`
-    };
+    }), []);
 
-    const trainingDescriptions = {
+    const trainingDescriptions = useMemo(() => ({
         "midjourney quickstart (1 hour one-on-one $250)": "This one-on-one session will get you from beginner to advanced in AI image generation using Midjourney.",
         "midjourney quickstart (2 hour group $50)": "Join a group training session to master Midjourney and create stunning AI-generated images.",
         "ai filmmaking quickstart (1 hour one-on-one $250)": "A private AI filmmaking training session covering automated video creation and storytelling.",
@@ -89,10 +60,24 @@ function Contact() {
         "custom consultation (1 hour one-on-one $250)": "Tailored one-on-one consulting to address your specific AI creative workflow needs.",
         "10 minute free consultation (one-on-one $0)": "A quick free consultation to discuss AI creativity and see how we can help.",
         "1 hour free group demo ($0)": "A one hour group demonstration of the creative possibilities available using the latest AI tools."
-    };
+    }), []);
 
-    const [trainingDescription, setTrainingDescription] = useState(trainingDescriptions["midjourney quickstart (1 hour one-on-one $250)"]);    
-    
+    const [trainingDescription, setTrainingDescription] = useState(trainingDescriptions["midjourney quickstart (1 hour one-on-one $250)"]);
+
+    useEffect(() => {
+        if (trainingQuery) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                projectType: "training",
+                trainingType: trainingQuery
+            }));
+            setShowTrainingOptions(true);
+
+            setTrainingDropdownOpen(false);
+            setPromoImage(trainingOptions[trainingQuery]);
+            setTrainingDescription(trainingDescriptions[trainingQuery]);
+        }
+    }, [trainingQuery, trainingOptions, trainingDescriptions]);
 
     const handleChange = (name, value) => {
         setFormData({ ...formData, [name]: value });
@@ -100,17 +85,17 @@ function Contact() {
         if (name === "projectType") {
             setShowTrainingOptions(value === "training");
             setDropdownOpen(false);
-            setShowCalendly(false);
+
             setPromoImage(trainingOptions[formData.trainingType]);
         }
 
         if (name === "trainingType") {
-            setShowCalendly(true);
+
             setPromoImage(trainingOptions[value]);
-            setTrainingDescription(trainingDescriptions[value]); // Update training description
+            setTrainingDescription(trainingDescriptions[value]);
             setTrainingDropdownOpen(false);
         }
-        
+
     };
 
     const handleSubmit = async (e) => {
@@ -121,9 +106,9 @@ function Contact() {
             new project submission:
             name: ${formData.name}
             email: ${formData.email}
-            
+
             ${formData.projectType.toUpperCase()} - ${formData.projectSubject}
-            
+
             ${formData.projectDescription}
         `;
 
@@ -145,7 +130,7 @@ function Contact() {
                 trainingType: "midjourney quickstart (1 hour one-on-one $250)",
             });
             setShowTrainingOptions(false);
-            setShowCalendly(false);
+
             setPromoImage(trainingOptions["midjourney quickstart (1 hour one-on-one $250)"]);
         } catch (error) {
             console.error("error sending email:", error);
@@ -172,18 +157,18 @@ function Contact() {
                     <div className="contact-title-wrapper">
                         <img src={titleContact} alt="Contact Title" className="title-contact-image" />
                         <p className="contact-intro">
-                            darion d’anjou provides visual development for and production of narrative films, commercials, music videos, games, digital experiences, and apps, as well as creative and technical training and consultation
+                            darion d'anjou provides visual development for and production of narrative films, commercials, music videos, games, digital experiences, and apps, as well as creative and technical training and consultation
                         </p>
                         {showTrainingOptions && (
                         <div className="training-info">
                             <img src={promoImage} alt="Training Promo" className="promo-image" />
-                            <p>{trainingDescription}</p> {/* Dynamically update text */}
+                            <p>{trainingDescription}</p>
                         </div>
-                    )}                        
+                    )}
                     </div>
 
                     <p className="contact-footer">
-                        darion d’anjou is an ai powered creative studio that leverages the latest in technology to deliver best of class creative and technology solutions
+                        darion d'anjou is an ai powered creative studio that leverages the latest in technology to deliver best of class creative and technology solutions
                     </p>
                 </div>
 
@@ -232,7 +217,7 @@ function Contact() {
                                         </ul>
                                     )}
                                 </div>
-                                
+
                             </>
                         )}
 
@@ -240,7 +225,7 @@ function Contact() {
                         <p></p>
                         {showTrainingOptions ? (
                             <div className="calendly-widget">
-                                <iframe src="https://calendly.com/dariondanjou/training-session" width="100%" height="240px" frameBorder="0"></iframe>
+                                <iframe title="Book a Training Session" src="https://calendly.com/dariondanjou/training-session" width="100%" height="240px" frameBorder="0"></iframe>
                             </div>
                         ) : (
                             <>

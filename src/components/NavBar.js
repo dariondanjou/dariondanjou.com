@@ -57,7 +57,7 @@ function NavBar({ expandedImage }) {
     };
 
     const handleEmailSubmit = async () => {
-        if (!email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+        if (!email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
             alert("Please enter a valid email address.");
             return;
         }
@@ -129,11 +129,9 @@ function NavBar({ expandedImage }) {
             {/* Main Navbar */}
             <nav className={`navbar ${expandedImage ? "expanded" : ""}`}>
                 <div className="nav-left">
-                    <a 
-                        href="#" 
-                        role="button" 
-                        onClick={(e) => { 
-                            e.preventDefault();
+                    <button
+                        className="nav-link-button"
+                        onClick={() => {
                             if (location.pathname === "/contact") {
                                 handleNavigation("/");
                             } else {
@@ -142,7 +140,7 @@ function NavBar({ expandedImage }) {
                         }}
                     >
                         <img src={logoMain} alt="Darion D'Anjou | Creativity x Technology" className="nav-logo" />
-                    </a>
+                    </button>
                 </div>
 
                 {(location.pathname === "/" || location.pathname === "/portfolio") && (
@@ -152,9 +150,9 @@ function NavBar({ expandedImage }) {
                 )}
 
                 <div className="nav-right">
-                    <a href="#" role="button" tabIndex="0" onClick={(e) => { e.preventDefault(); toggleExpand("email"); }}>
+                    <button className="nav-link-button" onClick={() => toggleExpand("email")}>
                         <img src={iconContact} alt="Sign up for updates" className="nav-icon" />
-                    </a>
+                    </button>
                     <a href="https://www.youtube.com/dariondanjou" target="_blank" rel="noopener noreferrer">
                         <img src={iconYouTube} alt="YouTube" className="nav-icon" />
                     </a>
@@ -179,9 +177,9 @@ function NavBar({ expandedImage }) {
                     <a href="https://wa.me/your-whatsapp-number" target="_blank" rel="noopener noreferrer">
                         <img src={iconWhatsapp} alt="WhatsApp" className="nav-icon" />
                     </a>
-                    <a href="#" role="button" tabIndex="0" onClick={(e) => { e.preventDefault(); toggleExpand("share"); }}>
+                    <button className="nav-link-button" onClick={() => toggleExpand("share")}>
                         <img src={iconShare} alt="Share" className="nav-icon" />
-                    </a>
+                    </button>
                 </div>
             </nav>
         </>

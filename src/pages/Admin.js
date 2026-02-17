@@ -8,7 +8,6 @@ function Admin() {
     const [images, setImages] = useState([]);
     const [users, setUsers] = useState([]);
     const [uploading, setUploading] = useState(false);
-    const [message, setMessage] = useState("");
     const [view, setView] = useState("images");
 
     useEffect(() => {
@@ -85,7 +84,6 @@ function Admin() {
     // Drag and Drop Upload (presigned URL flow)
     const onDrop = useCallback(async (acceptedFiles) => {
         setUploading(true);
-        setMessage("Uploading images...");
 
         try {
             for (const file of acceptedFiles) {
@@ -108,11 +106,9 @@ function Admin() {
                 });
             }
 
-            setMessage(`Uploaded ${acceptedFiles.length} image(s) successfully!`);
             await fetchImages();
         } catch (error) {
             console.error("Error uploading images:", error);
-            setMessage("Failed to upload images.");
         } finally {
             setUploading(false);
         }
