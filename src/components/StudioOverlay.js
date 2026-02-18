@@ -25,32 +25,18 @@ function StudioOverlay({ isOpen, onClose }) {
         {/* Left Column */}
         <div className="studio-overlay-left">
           <div className="studio-overlay-left-top">
-            <div className="studio-header">
+            <div className="studio-bio-section">
               <img
                 src="/dariondanjou-profilepicture-large.png"
                 alt="Darion D'Anjou"
                 className="studio-headshot"
               />
-              <div className="studio-header-text">
-                <h2 className="studio-title">
-                  AI Artist | Filmmaker | Engineer
-                </h2>
-              </div>
+              <h2 className="studio-title">
+                AI Artist | Filmmaker | Engineer
+              </h2>
+              <div className="studio-bio">{BIO_TEXT}</div>
             </div>
-            <div className="studio-bio">{BIO_TEXT}</div>
             <div className="studio-description">{STUDIO_DESCRIPTION}</div>
-            <button
-              className="studio-cta"
-              onClick={() => {
-                const chatInput = document.querySelector(".chat-input");
-                if (chatInput) chatInput.focus();
-              }}
-            >
-              Let's Work Together. Start a Chat &#x2192;
-            </button>
-          </div>
-          <div className="studio-overlay-left-bottom">
-            <span className="studio-label">AI Creative Studio</span>
           </div>
         </div>
 

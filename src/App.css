@@ -135,6 +135,7 @@ input:focus {
   justify-content: space-between;
   padding: 0;
   z-index: 3000;
+  overflow: visible; /* Allow logos to bleed past the bottom */
   transition: height 0.4s ease-in-out; /* Expanding Animation */
 }
 
@@ -324,10 +325,10 @@ input:focus {
   background-color: #4da3d8;
 }
 
-/* ✅ Left Logo - Vertically Centered */
+/* ✅ Left Logo - Aligned at baseline with barcode bleed */
 .nav-left {
   display: flex;
-  align-items: center; /* Vertically center logo */
+  align-items: flex-start; /* Align logos from top for baseline alignment */
   justify-content: flex-start;
   width: 33.3%;
   height: 100%;
@@ -335,27 +336,28 @@ input:focus {
 }
 
 .nav-logo {
-  height: 90px; /* Bleeds above navbar for layered effect */
+  height: 120px; /* Tall enough for barcode lines to bleed off screen */
   max-width: 100%; /* Prevent overflow into center */
   object-fit: contain;
-  object-position: left center;
+  object-position: left top;
   margin: 0;
   cursor: pointer; /* Clickable to expand */
 }
 
-/* ✅ Center Logo - Vertically Centered */
+/* ✅ Center Logo - Aligned at baseline with barcode bleed */
 .nav-center {
   display: flex;
   justify-content: center;
-  align-items: center; /* Vertically center */
+  align-items: flex-start; /* Align from top for matching baseline */
   width: 33.3%;
   height: 100%;
 }
 
 .nav-categories {
-  height: 90px; /* Same height as main logo, bleeds above */
+  height: 120px; /* Same height as main logo, barcode lines bleed off screen */
   max-width: 100%; /* Prevent overflow */
   object-fit: contain;
+  object-position: center top;
   margin: 0;
 }
 
@@ -1253,12 +1255,9 @@ textarea::-webkit-scrollbar-button:decrement {
   gap: 16px;
 }
 
-/* Header: photo + title side by side */
-.studio-header {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 20px;
+/* Bio section: headshot floated with text wrapping around it */
+.studio-bio-section {
+  overflow: hidden; /* Contain floats */
 }
 
 .studio-headshot {
@@ -1266,14 +1265,9 @@ textarea::-webkit-scrollbar-button:decrement {
   height: 140px;
   border-radius: 0;
   object-fit: cover;
-  flex-shrink: 0;
-}
-
-.studio-header-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding-top: 4px;
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 10px;
 }
 
 .studio-title {
@@ -1281,7 +1275,7 @@ textarea::-webkit-scrollbar-button:decrement {
   font-size: 14px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.6);
-  margin: 0;
+  margin: 0 0 12px 0;
   letter-spacing: 1px;
 }
 
@@ -1293,9 +1287,6 @@ textarea::-webkit-scrollbar-button:decrement {
   line-height: 1.6;
   white-space: pre-line;
   text-align: justify;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 16px 20px;
 }
 
 .studio-description {
@@ -1309,36 +1300,6 @@ textarea::-webkit-scrollbar-button:decrement {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.studio-cta {
-  background: white;
-  color: black;
-  border: none;
-  padding: 12px 24px;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 16px;
-  align-self: flex-start;
-  transition: background 0.2s ease;
-}
-
-.studio-cta:hover {
-  background: #ddd;
-}
-
-.studio-overlay-left-bottom {
-  padding-top: 24px;
-}
-
-.studio-label {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.2);
-  letter-spacing: 2px;
-  text-transform: lowercase;
-}
 
 /* Right Column */
 .studio-overlay-right {
@@ -1360,14 +1321,17 @@ textarea::-webkit-scrollbar-button:decrement {
   max-height: 600px;
   display: flex;
   flex-direction: column;
-  background: rgba(20, 20, 20, 1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: left; /* Override inherited center alignment */
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
+  padding-bottom: 16px;
+  margin-bottom: 8px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1398,6 +1362,7 @@ textarea::-webkit-scrollbar-button:decrement {
   font-size: 13px;
   line-height: 1.5;
   word-wrap: break-word;
+  text-align: left; /* Ensure text is left-aligned, not centered */
 }
 
 .chat-message-assistant .chat-bubble {

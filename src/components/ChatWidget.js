@@ -14,40 +14,19 @@ function ChatWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Send initial greeting on mount
+  // Set welcome message on mount
   useEffect(() => {
     if (hasGreeted.current) return;
     hasGreeted.current = true;
 
-    const greet = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            messages: [{ role: "user", content: "hi" }],
-          }),
-        });
-        const data = await response.json();
-        if (data.message) {
-          setMessages([{ role: "assistant", content: data.message }]);
-        }
-      } catch (error) {
-        console.error("Chat greeting error:", error);
-        setMessages([
-          {
-            role: "assistant",
-            content:
-              "hey! what kind of project do you want to work on together?",
-          },
-        ]);
-      }
-      setLoading(false);
-      inputRef.current?.focus();
-    };
-
-    greet();
+    setMessages([
+      {
+        role: "assistant",
+        content:
+          "hey there! welcome to darion d'anjou ai creative studio. what kind of project do you want us to work on together?",
+      },
+    ]);
+    inputRef.current?.focus();
   }, []);
 
   const sendMessage = async () => {
