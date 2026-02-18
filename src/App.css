@@ -1236,7 +1236,7 @@ textarea::-webkit-scrollbar-button:decrement {
 .studio-headshot {
   width: 180px;
   height: 180px;
-  border-radius: 50%;
+  border-radius: 0;
   object-fit: cover;
   margin-bottom: 8px;
 }
