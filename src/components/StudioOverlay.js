@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ChatWidget from "./ChatWidget";
 
 const BIO_TEXT = `Darion D'Anjou is an award-winning writer, director, AI creative architect, and visual effects supervisor based in Atlanta, Georgia. He operates Darion D'Anjou Productions, a full-service film production company delivering world-class creative solutions for Fortune 500 companies and government organizations\u2014including CNN, Coca-Cola, AT&T Time Warner, HBO, Disney, Marvel Studios, SONY Pictures Entertainment, Nike, and the Centers for Disease Control.
@@ -11,6 +11,8 @@ const STUDIO_DESCRIPTION =
   "darion d'anjou is an ai powered creative studio that leverages the latest in technology to deliver best of class creative and technology solutions";
 
 function StudioOverlay({ isOpen, onClose }) {
+  const [bioExpanded, setBioExpanded] = useState(false);
+
   if (!isOpen) return null;
 
   return (
@@ -25,7 +27,7 @@ function StudioOverlay({ isOpen, onClose }) {
         {/* Left Column */}
         <div className="studio-overlay-left">
           <div className="studio-overlay-left-top">
-            <div className="studio-bio-section">
+            <div className={`studio-bio-section ${bioExpanded ? "bio-expanded" : ""}`}>
               <img
                 src="/dariondanjou-profilepicture-large.png"
                 alt="Darion D'Anjou"
@@ -35,6 +37,12 @@ function StudioOverlay({ isOpen, onClose }) {
                 AI Artist | Filmmaker | Engineer
               </h2>
               <div className="studio-bio">{BIO_TEXT}</div>
+              <button
+                className="bio-toggle"
+                onClick={() => setBioExpanded(!bioExpanded)}
+              >
+                {bioExpanded ? "less" : "more..."}
+              </button>
             </div>
             <div className="studio-description">{STUDIO_DESCRIPTION}</div>
           </div>
