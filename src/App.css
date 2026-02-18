@@ -331,11 +331,14 @@ input:focus {
   justify-content: flex-start;
   width: 33.3%;
   height: 100%;
+  overflow: hidden; /* Prevent logo from overlapping center */
 }
 
 .nav-logo {
   height: 84px; /* Reduced height to fit in navbar */
+  max-width: 100%; /* Prevent overflow into center */
   object-fit: contain;
+  object-position: left bottom;
   margin: 0;
   position: relative;
   transform: translateY(20px); /* Moves it downward */
@@ -348,10 +351,12 @@ input:focus {
   flex-grow: 1;
   justify-content: center;
   width: 33.3%;
+  overflow: hidden; /* Prevent overlap */
 }
 
 .nav-categories {
   height: 84px; /* Reduced height to fit in navbar */
+  max-width: 100%; /* Prevent overflow */
   object-fit: contain;
   margin: 0;
   position: relative;
@@ -1171,6 +1176,467 @@ textarea::-webkit-scrollbar-button:decrement {
 }
 
 
+/* ===========================
+   STUDIO OVERLAY
+   =========================== */
+
+.studio-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayFadeIn 0.3s ease-in-out;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.studio-overlay-content {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  max-width: 1200px;
+  height: 85vh;
+  gap: 40px;
+}
+
+/* Left Column */
+.studio-overlay-left {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.studio-overlay-left::-webkit-scrollbar {
+  display: none;
+}
+
+.studio-overlay-left-top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.studio-headshot {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.studio-title {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.studio-bio {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.studio-description {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.studio-cta {
+  background: white;
+  color: black;
+  border: none;
+  padding: 12px 24px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 16px;
+  align-self: flex-start;
+  transition: background 0.2s ease;
+}
+
+.studio-cta:hover {
+  background: #ddd;
+}
+
+.studio-overlay-left-bottom {
+  padding-top: 24px;
+}
+
+.studio-label {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 2px;
+  text-transform: lowercase;
+}
+
+/* Right Column */
+.studio-overlay-right {
+  width: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 
+/* ===========================
+   CHAT WIDGET
+   =========================== */
+
+.chat-widget {
+  width: 100%;
+  max-width: 500px;
+  height: 70vh;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(20, 20, 20, 1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-messages::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-message {
+  display: flex;
+}
+
+.chat-message-assistant {
+  justify-content: flex-start;
+}
+
+.chat-message-user {
+  justify-content: flex-end;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.chat-message-assistant .chat-bubble {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 2px 12px 12px 12px;
+}
+
+.chat-message-user .chat-bubble {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-radius: 12px 2px 12px 12px;
+}
+
+/* Typing indicator */
+.chat-typing {
+  display: flex;
+  gap: 4px;
+  padding: 12px 18px;
+}
+
+.chat-typing span {
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: chatTyping 1.4s infinite;
+}
+
+.chat-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.chat-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes chatTyping {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+/* Chat Input */
+.chat-input-container {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
+  padding: 8px;
+  outline: none;
+}
+
+.chat-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.chat-send {
+  background: white;
+  color: black;
+  border: none;
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chat-send:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.chat-send:hover:not(:disabled) {
+  background: #ddd;
+}
+
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+  .studio-overlay-content {
+    width: 95%;
+    gap: 24px;
+  }
+
+  .studio-headshot {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+/* Mobile: below 768px */
+@media (max-width: 767px) {
+  /* Single column portfolio grid */
+  .image-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Navbar: stack logos vertically, make icons bar sticky */
+  .navbar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 50px;
+    padding: 8px 0;
+  }
+
+  .nav-left {
+    width: 50%;
+    order: 1;
+  }
+
+  .nav-logo {
+    height: 50px;
+    transform: translateY(8px);
+  }
+
+  .nav-center {
+    width: 50%;
+    order: 2;
+    justify-content: flex-end;
+    padding-right: 10px;
+  }
+
+  .nav-categories {
+    height: 50px;
+    transform: translateY(4px);
+  }
+
+  .nav-right {
+    width: 100%;
+    order: 3;
+    justify-content: center;
+    margin-right: 0;
+    margin-bottom: 0;
+    gap: 10px;
+    padding: 6px 0 2px;
+  }
+
+  .nav-icon {
+    height: 22px;
+    margin-right: 0;
+  }
+
+  /* Expanded navbar adjustments */
+  .expanded-navbar.expanded {
+    transform: translateY(-50px);
+  }
+
+  /* Gallery container - account for taller navbar */
+  .page-content {
+    padding-bottom: 90px;
+  }
+
+  /* Studio overlay: stack columns vertically */
+  .studio-overlay-content {
+    flex-direction: column;
+    height: 90vh;
+    width: 92%;
+    gap: 20px;
+    overflow-y: auto;
+  }
+
+  .studio-overlay-left {
+    width: 100%;
+    overflow-y: visible;
+  }
+
+  .studio-overlay-right {
+    width: 100%;
+    min-height: 400px;
+  }
+
+  .studio-headshot {
+    width: 120px;
+    height: 120px;
+  }
+
+  .chat-widget {
+    max-height: none;
+    height: 400px;
+  }
+
+  /* Contact page responsive */
+  .contact-container {
+    flex-direction: column;
+    width: 95%;
+    height: auto;
+    min-height: calc(100vh - 90px);
+  }
+
+  .contact-left {
+    width: 100%;
+    height: auto;
+    text-align: center;
+  }
+
+  .title-contact-image {
+    width: 100%;
+    max-width: 300px;
+    position: static;
+    margin: 0 auto;
+  }
+
+  .contact-intro {
+    text-align: center;
+  }
+
+  .contact-right {
+    width: 100%;
+  }
+
+  .contact-footer {
+    text-align: center;
+  }
+}
+
+/* Small mobile: 375px */
+@media (max-width: 375px) {
+  .nav-right {
+    gap: 6px;
+  }
+
+  .nav-icon {
+    height: 18px;
+  }
+
+  .nav-logo {
+    height: 40px;
+  }
+
+  .nav-categories {
+    height: 40px;
+  }
+
+  .studio-overlay-content {
+    width: 96%;
+    gap: 16px;
+  }
+
+  .studio-headshot {
+    width: 100px;
+    height: 100px;
+  }
+
+  .studio-bio {
+    font-size: 11px;
+  }
+
+  .chat-widget {
+    height: 350px;
+  }
+
+  .chat-bubble {
+    font-size: 12px;
+  }
+}
 

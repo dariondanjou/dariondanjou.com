@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "../App.css";
 
 const logoMain = process.env.REACT_APP_LOGO_MAIN;
@@ -15,17 +15,16 @@ const iconDiscord = process.env.REACT_APP_ICON_DISCORD;
 const iconWhatsapp = process.env.REACT_APP_ICON_WHATSAPP;
 const iconShare = process.env.REACT_APP_ICON_SHARE;
 
-function NavBar({ expandedImage }) {
+function NavBar({ expandedImage, onToggleOverlay }) {
     const [expanded, setExpanded] = useState(false);
     const [expandedType, setExpandedType] = useState(null);
     const [email, setEmail] = useState("");
-    const navigate = useNavigate();
     const location = useLocation();
 
     // Expand/Collapse logic with smooth height transition
     const toggleExpand = (type) => {
-        collapseExpanded(() => { //Always call with callback
-            if (expandedType!== type) { // Only expand if the type is different
+        collapseExpanded(() => {
+            if (expandedType !== type) {
                 setTimeout(() => {
                     setExpanded(true);
                     setExpandedType(type);
@@ -48,12 +47,7 @@ function NavBar({ expandedImage }) {
             if (callback) {
                 setTimeout(callback, 100);
             }
-        }, 300); // Smooth height collapse
-    };
-
-    const handleNavigation = (route) => {
-        if (location.pathname === route) return;
-        collapseExpanded(() => navigate(route));
+        }, 300);
     };
 
     const handleEmailSubmit = async () => {
@@ -82,6 +76,17 @@ function NavBar({ expandedImage }) {
         }
     };
 
+    const handleLogoClick = () => {
+        // Collapse any expanded section first
+        if (expanded) {
+            collapseExpanded();
+        }
+        // Toggle the studio overlay
+        if (onToggleOverlay) {
+            onToggleOverlay();
+        }
+    };
+
     return (
         <>
             {/* Expanded Navbar Section */}
@@ -97,7 +102,7 @@ function NavBar({ expandedImage }) {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <button className="email-submit" onClick={handleEmailSubmit}>➝</button>
+                                <button className="email-submit" onClick={handleEmailSubmit}>&#x2192;</button>
                             </div>
                         </div>
                     ) : expandedType === "share" ? (
@@ -109,20 +114,7 @@ function NavBar({ expandedImage }) {
                             <a href={`https://api.whatsapp.com/send?text=${window.location.href}`} target="_blank" rel="noopener noreferrer"> WhatsApp </a>
                             <a href={`mailto:?subject=Check this out&body=${window.location.href}`} target="_blank" rel="noopener noreferrer"> Email </a>
                         </div>
-                    ) : (
-                        <>
-                            <div className="about-container">
-                                <p className="about-text">
-                                    darion d’anjou is an ai powered creative studio that leverages the latest in technology to deliver best of class creative and technology solutions
-                                </p>
-                            </div>
-                            <div className="button-container">
-                                <button className="contact-button" onClick={() => handleNavigation("/contact")}>
-                                    let’s work together! ➝
-                                </button>
-                            </div>
-                        </>
-                    )}
+                    ) : null}
                 </div>
             </div>
 
@@ -131,13 +123,7 @@ function NavBar({ expandedImage }) {
                 <div className="nav-left">
                     <button
                         className="nav-link-button"
-                        onClick={() => {
-                            if (location.pathname === "/contact") {
-                                handleNavigation("/");
-                            } else {
-                                toggleExpand("about");
-                            }
-                        }}
+                        onClick={handleLogoClick}
                     >
                         <img src={logoMain} alt="Darion D'Anjou | Creativity x Technology" className="nav-logo" />
                     </button>

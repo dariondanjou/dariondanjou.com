@@ -94,3 +94,18 @@
     background-color: black; /* Ensure visibility */
     z-index: 1000; /* Keep above expanded image */
 }
+
+/* Responsive: single column grid on mobile */
+@media (max-width: 767px) {
+    .image-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-container {
+        padding-bottom: 90px; /* Extra space for taller mobile navbar */
+    }
+
+    .fullscreen-image {
+        margin-top: 0;
+    }
+}
