@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Black background -->
+  <rect width="512" height="512" rx="0" fill="#000000"/>
+  
+  <!-- dd | ai text - clean, bold, monospaced feel -->
+  <text x="256" y="290" 
+        font-family="'Courier New', 'SF Mono', monospace" 
+        font-weight="700" 
+        font-size="140" 
+        fill="#ffffff" 
+        text-anchor="middle" 
+        letter-spacing="-2">dd | ai</text>
+</svg>
