@@ -1278,7 +1278,9 @@ textarea::-webkit-scrollbar-button:decrement {
   color: rgba(255, 255, 255, 0.6);
   margin: 0 0 12px 0;
   letter-spacing: 1px;
-  overflow: hidden; /* Span full width next to floated headshot */
+  display: block;
+  overflow: hidden; /* Create BFC to fill remaining width beside float */
+  width: auto;
 }
 
 .studio-bio {
@@ -1289,6 +1291,7 @@ textarea::-webkit-scrollbar-button:decrement {
   line-height: 1.6;
   white-space: pre-line;
   text-align: justify;
+  overflow: hidden; /* Match BFC behavior with title */
 }
 
 .studio-description {
