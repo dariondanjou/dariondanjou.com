@@ -324,43 +324,39 @@ input:focus {
   background-color: #4da3d8;
 }
 
-/* ✅ Left Logo - Flush to Bottom Left */
+/* ✅ Left Logo - Vertically Centered */
 .nav-left {
   display: flex;
-  align-items: flex-end; /* Aligns logo to the bottom */
+  align-items: center; /* Vertically center logo */
   justify-content: flex-start;
   width: 33.3%;
   height: 100%;
-  overflow: hidden; /* Prevent logo from overlapping center */
+  padding-left: 10px;
 }
 
 .nav-logo {
-  height: 84px; /* Reduced height to fit in navbar */
+  height: 50px; /* Fits within 70px navbar */
   max-width: 100%; /* Prevent overflow into center */
   object-fit: contain;
-  object-position: left bottom;
+  object-position: left center;
   margin: 0;
-  position: relative;
-  transform: translateY(20px); /* Moves it downward */
   cursor: pointer; /* Clickable to expand */
 }
 
-/* ✅ Center Logo - Perfectly Centered */
+/* ✅ Center Logo - Vertically Centered */
 .nav-center {
   display: flex;
-  flex-grow: 1;
   justify-content: center;
+  align-items: center; /* Vertically center */
   width: 33.3%;
-  overflow: hidden; /* Prevent overlap */
+  height: 100%;
 }
 
 .nav-categories {
-  height: 84px; /* Reduced height to fit in navbar */
+  height: 40px; /* Fits within 70px navbar */
   max-width: 100%; /* Prevent overflow */
   object-fit: contain;
   margin: 0;
-  position: relative;
-  transform: translateY(12px); /* Moves it downward */
 }
 
 /* ✅ Right Side Icons - Properly Aligned */
@@ -370,8 +366,8 @@ input:focus {
   justify-content: flex-end;
   width: 33.3%;
   align-items: center;
+  height: 100%;
   margin-right: 20px; /* Adds space from the right edge */
-  margin-bottom: -16px;
 }
 
 /* ✅ Social Media Icons - Initially Transparent */
@@ -1186,7 +1182,9 @@ textarea::-webkit-scrollbar-button:decrement {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 4000;
   display: flex;
   align-items: center;
@@ -1259,6 +1257,10 @@ textarea::-webkit-scrollbar-button:decrement {
   color: rgba(255, 255, 255, 0.4);
   line-height: 1.6;
   white-space: pre-line;
+  text-align: justify;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 16px 20px;
 }
 
 .studio-description {
@@ -1481,44 +1483,44 @@ textarea::-webkit-scrollbar-button:decrement {
     grid-template-columns: 1fr !important;
   }
 
-  /* Navbar: stack logos vertically, make icons bar sticky */
+  /* Navbar: stack everything vertically, center each element */
   .navbar {
-    flex-wrap: wrap;
+    flex-direction: column;
     height: auto;
-    min-height: 50px;
     padding: 8px 0;
+    gap: 4px;
   }
 
   .nav-left {
-    width: 50%;
+    width: 100%;
     order: 1;
+    justify-content: center;
+    padding-left: 0;
   }
 
   .nav-logo {
-    height: 50px;
-    transform: translateY(8px);
+    height: 40px;
   }
 
   .nav-center {
-    width: 50%;
+    width: 100%;
     order: 2;
-    justify-content: flex-end;
-    padding-right: 10px;
+    justify-content: center;
   }
 
   .nav-categories {
-    height: 50px;
-    transform: translateY(4px);
+    height: 30px;
   }
 
   .nav-right {
     width: 100%;
     order: 3;
     justify-content: center;
+    flex-wrap: wrap;
     margin-right: 0;
-    margin-bottom: 0;
+    height: auto;
     gap: 10px;
-    padding: 6px 0 2px;
+    padding: 4px 10px 2px;
   }
 
   .nav-icon {
@@ -1610,11 +1612,11 @@ textarea::-webkit-scrollbar-button:decrement {
   }
 
   .nav-logo {
-    height: 40px;
+    height: 34px;
   }
 
   .nav-categories {
-    height: 40px;
+    height: 24px;
   }
 
   .studio-overlay-content {
