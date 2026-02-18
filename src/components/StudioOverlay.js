@@ -14,7 +14,10 @@ function StudioOverlay({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="studio-overlay" onClick={onClose}>
+    <div className="studio-overlay">
+      {/* Close button */}
+      <button className="studio-close" onClick={onClose}>&#x2715;</button>
+
       <div
         className="studio-overlay-content"
         onClick={(e) => e.stopPropagation()}
@@ -22,14 +25,18 @@ function StudioOverlay({ isOpen, onClose }) {
         {/* Left Column */}
         <div className="studio-overlay-left">
           <div className="studio-overlay-left-top">
-            <img
-              src="/dariondanjou-profilepicture-large.png"
-              alt="Darion D'Anjou"
-              className="studio-headshot"
-            />
-            <h2 className="studio-title">
-              AI Artist | Filmmaker | Engineer
-            </h2>
+            <div className="studio-header">
+              <img
+                src="/dariondanjou-profilepicture-large.png"
+                alt="Darion D'Anjou"
+                className="studio-headshot"
+              />
+              <div className="studio-header-text">
+                <h2 className="studio-title">
+                  AI Artist | Filmmaker | Engineer
+                </h2>
+              </div>
+            </div>
             <div className="studio-bio">{BIO_TEXT}</div>
             <div className="studio-description">{STUDIO_DESCRIPTION}</div>
             <button

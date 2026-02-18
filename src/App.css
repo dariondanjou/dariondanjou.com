@@ -335,7 +335,7 @@ input:focus {
 }
 
 .nav-logo {
-  height: 50px; /* Fits within 70px navbar */
+  height: 90px; /* Bleeds above navbar for layered effect */
   max-width: 100%; /* Prevent overflow into center */
   object-fit: contain;
   object-position: left center;
@@ -353,7 +353,7 @@ input:focus {
 }
 
 .nav-categories {
-  height: 40px; /* Fits within 70px navbar */
+  height: 90px; /* Same height as main logo, bleeds above */
   max-width: 100%; /* Prevent overflow */
   object-fit: contain;
   margin: 0;
@@ -1181,11 +1181,11 @@ textarea::-webkit-scrollbar-button:decrement {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 70px); /* Stop above the navbar */
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 4000;
+  z-index: 2500; /* Below navbar (3000) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1203,13 +1203,33 @@ textarea::-webkit-scrollbar-button:decrement {
   }
 }
 
+/* Close button */
+.studio-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+  z-index: 2;
+  transition: color 0.2s ease;
+}
+
+.studio-close:hover {
+  color: white;
+}
+
 .studio-overlay-content {
   display: flex;
   flex-direction: row;
   width: 90%;
   max-width: 1200px;
-  height: 85vh;
-  gap: 40px;
+  height: calc(100vh - 70px - 60px); /* Account for navbar + padding */
+  gap: 60px; /* Clear separation between bio and chat */
 }
 
 /* Left Column */
@@ -1233,12 +1253,27 @@ textarea::-webkit-scrollbar-button:decrement {
   gap: 16px;
 }
 
+/* Header: photo + title side by side */
+.studio-header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+}
+
 .studio-headshot {
-  width: 180px;
-  height: 180px;
+  width: 140px;
+  height: 140px;
   border-radius: 0;
   object-fit: cover;
-  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.studio-header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 4px;
 }
 
 .studio-title {
@@ -1499,7 +1534,7 @@ textarea::-webkit-scrollbar-button:decrement {
   }
 
   .nav-logo {
-    height: 40px;
+    height: 50px;
   }
 
   .nav-center {
@@ -1509,7 +1544,7 @@ textarea::-webkit-scrollbar-button:decrement {
   }
 
   .nav-categories {
-    height: 30px;
+    height: 50px;
   }
 
   .nav-right {
@@ -1612,11 +1647,11 @@ textarea::-webkit-scrollbar-button:decrement {
   }
 
   .nav-logo {
-    height: 34px;
+    height: 40px;
   }
 
   .nav-categories {
-    height: 24px;
+    height: 40px;
   }
 
   .studio-overlay-content {
