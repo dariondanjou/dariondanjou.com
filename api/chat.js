@@ -23,8 +23,8 @@ CONVERSATION FLOW:
 2. Ask focused follow-ups to understand: project type, scope, timeline, dates, budget (if comfortable)
 3. Collect contact info: name, email, phone (optional)
 4. Summarize the project back to them and ask to confirm
-5. On confirmation, use the submit_project_inquiry tool
-6. Tell them we'll follow up soon
+5. On confirmation, use the submit_project_inquiry tool. Include a conversation_summary that recaps the full conversation — what the client said, what was discussed, key details, and the final project scope agreed upon.
+6. Tell them we'll follow up soon and that a summary has been sent to their email
 
 RULES:
 - Be concise and direct. 1-3 sentences per response max.
@@ -58,12 +58,17 @@ const TOOLS = [
           description:
             "Full summary of the project including scope, timeline, and any other details discussed",
         },
+        conversation_summary: {
+          type: "string",
+          description:
+            "A friendly, readable recap of the entire conversation between the client and the studio assistant. Include what was discussed, key decisions, and the final project scope agreed upon.",
+        },
         timeline: {
           type: "string",
           description: "Project timeline or dates mentioned",
         },
       },
-      required: ["name", "email", "project_summary"],
+      required: ["name", "email", "project_summary", "conversation_summary"],
     },
   },
 ];
@@ -133,6 +138,7 @@ module.exports = async function handler(req, res) {
         await transporter.sendMail({
           from: process.env.EMAIL_USER,
           to: "dariondanjou@gmail.com",
+          cc: inquiry.email,
           subject: `new project inquiry from ${inquiry.name}`,
           text: [
             `new project inquiry`,
@@ -145,6 +151,11 @@ module.exports = async function handler(req, res) {
             ``,
             `project summary:`,
             inquiry.project_summary,
+            ``,
+            `---`,
+            ``,
+            `conversation summary:`,
+            inquiry.conversation_summary || "no conversation summary available",
           ].join("\n"),
         });
         emailSent = true;

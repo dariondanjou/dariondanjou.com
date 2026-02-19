@@ -1183,7 +1183,7 @@ textarea::-webkit-scrollbar-button:decrement {
   top: 0;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 70px); /* Stop above the navbar */
+  bottom: 70px; /* Flush with navbar */
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -1230,7 +1230,7 @@ textarea::-webkit-scrollbar-button:decrement {
   flex-direction: row;
   width: 90%;
   max-width: 1200px;
-  height: calc(100vh - 70px - 60px); /* Account for navbar + padding */
+  height: calc(100% - 60px); /* Account for padding */
   margin-top: 30px; /* Lower bio and chat sections */
   gap: 60px; /* Clear separation between bio and chat */
 }
