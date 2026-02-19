@@ -4,12 +4,12 @@ import "../App.css";
 
 const logoMain = process.env.REACT_APP_LOGO_MAIN;
 const logoCategories = process.env.REACT_APP_LOGO_CATEGORIES;
-const iconContact = process.env.REACT_APP_ICON_CONTACT;
+// const iconContact = process.env.REACT_APP_ICON_CONTACT;
 const iconYouTube = process.env.REACT_APP_ICON_YOUTUBE;
 const iconInstagram = process.env.REACT_APP_ICON_INSTAGRAM;
 const iconTikTok = process.env.REACT_APP_ICON_TIKTOK;
 const iconX = process.env.REACT_APP_ICON_X;
-const iconTwitch = process.env.REACT_APP_ICON_TWITCH;
+// const iconTwitch = process.env.REACT_APP_ICON_TWITCH;
 const iconLinkedIn = process.env.REACT_APP_ICON_LINKEDIN;
 const iconDiscord = process.env.REACT_APP_ICON_DISCORD;
 const iconWhatsapp = process.env.REACT_APP_ICON_WHATSAPP;
