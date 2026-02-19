@@ -136,9 +136,11 @@ function NavBar({ expandedImage, onToggleOverlay }) {
                 )}
 
                 <div className="nav-right">
+                    {/* Email icon hidden for now
                     <button className="nav-link-button" onClick={() => toggleExpand("email")}>
                         <img src={iconContact} alt="Sign up for updates" className="nav-icon" />
                     </button>
+                    */}
                     <a href="https://www.youtube.com/dariondanjou" target="_blank" rel="noopener noreferrer">
                         <img src={iconYouTube} alt="YouTube" className="nav-icon" />
                     </a>
@@ -151,16 +153,18 @@ function NavBar({ expandedImage, onToggleOverlay }) {
                     <a href="https://x.com/dariondanjou" target="_blank" rel="noopener noreferrer">
                         <img src={iconX} alt="X" className="nav-icon" />
                     </a>
+                    {/* Twitch hidden for now
                     <a href="https://www.twitch.tv/dariondanjou" target="_blank" rel="noopener noreferrer">
                         <img src={iconTwitch} alt="Twitch" className="nav-icon" />
                     </a>
+                    */}
                     <a href="https://www.linkedin.com/in/darion-d-anjou-39a3a926/" target="_blank" rel="noopener noreferrer">
                         <img src={iconLinkedIn} alt="LinkedIn" className="nav-icon" />
                     </a>
                     <a href="https://discord.gg/ejEBJss8gM" target="_blank" rel="noopener noreferrer">
                         <img src={iconDiscord} alt="Discord" className="nav-icon" />
                     </a>
-                    <a href="https://wa.me/your-whatsapp-number" target="_blank" rel="noopener noreferrer">
+                    <a href="https://chat.whatsapp.com/GelyV1XoEL9HVnlA9QrxDn" target="_blank" rel="noopener noreferrer">
                         <img src={iconWhatsapp} alt="WhatsApp" className="nav-icon" />
                     </a>
                     <button className="nav-link-button" onClick={() => toggleExpand("share")}>
