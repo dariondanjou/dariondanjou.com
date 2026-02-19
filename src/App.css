@@ -340,7 +340,7 @@ input:focus {
   max-width: 100%; /* Prevent overflow into center */
   object-fit: contain;
   object-position: left top;
-  margin: 8px 0 0 -6px; /* Shift down 8px, left 6px */
+  margin: 9px 0 0 -7px; /* Shift down 9px, left 7px */
   cursor: pointer; /* Clickable to expand */
 }
 
