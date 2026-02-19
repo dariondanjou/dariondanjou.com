@@ -340,7 +340,7 @@ input:focus {
   max-width: 100%; /* Prevent overflow into center */
   object-fit: contain;
   object-position: left top;
-  margin: 0;
+  margin: 4px 0 0 0; /* Shift down 4px */
   cursor: pointer; /* Clickable to expand */
 }
 
@@ -355,7 +355,7 @@ input:focus {
 
 .nav-categories {
   height: 85px; /* Scaled down to match main logo text height */
-  max-width: 100%; /* Prevent overflow */
+  max-width: 50%; /* Half width */
   object-fit: contain;
   object-position: center top;
   margin: 0;

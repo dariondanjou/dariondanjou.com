@@ -111,6 +111,7 @@ function ChatWidget() {
           ref={inputRef}
           type="text"
           className="chat-input"
+          autoFocus
           placeholder={submitted ? "inquiry submitted!" : "type a message..."}
           value={input}
           onChange={(e) => setInput(e.target.value)}
