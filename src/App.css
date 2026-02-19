@@ -354,7 +354,7 @@ input:focus {
 }
 
 .nav-categories {
-  height: 120px; /* Same height as main logo, barcode lines bleed off screen */
+  height: 85px; /* Scaled down to match main logo text height */
   max-width: 100%; /* Prevent overflow */
   object-fit: contain;
   object-position: center top;
