@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ChatWidget from "./ChatWidget";
 
 const BIO_TEXT = `Darion D'Anjou is an award-winning writer, director, ai creative architect, and visual effects supervisor based in atlanta, georgia. he operates Darion D'Anjou Productions, a full-service film production company delivering world-class creative solutions for Fortune 500 companies and government organizations\u2014including CNN, Coca-Cola, AT&T Time Warner, HBO, Disney, Marvel Studios, SONY Pictures Entertainment, Nike, and the Centers for Disease Control.
@@ -12,11 +12,23 @@ const STUDIO_DESCRIPTION =
 
 function StudioOverlay({ isOpen, onClose }) {
   const [bioExpanded, setBioExpanded] = useState(false);
+  const [navbarHeight, setNavbarHeight] = useState(70);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const measure = () => {
+      const nav = document.querySelector(".navbar");
+      if (nav) setNavbarHeight(nav.offsetHeight);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="studio-overlay">
+    <div className="studio-overlay" style={{ bottom: navbarHeight }}>
       {/* Close button */}
       <button className="studio-close" onClick={onClose}>&#x2715;</button>
 

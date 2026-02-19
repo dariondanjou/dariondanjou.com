@@ -1196,7 +1196,7 @@ textarea::-webkit-scrollbar-button:decrement {
   top: 0;
   left: 0;
   width: 100vw;
-  bottom: 70px; /* Flush with navbar */
+  bottom: 70px; /* Default desktop; overridden by JS measurement */
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -1205,6 +1205,8 @@ textarea::-webkit-scrollbar-button:decrement {
   align-items: center;
   justify-content: center;
   animation: overlayFadeIn 0.3s ease-in-out;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 @keyframes overlayFadeIn {
@@ -1562,18 +1564,17 @@ textarea::-webkit-scrollbar-button:decrement {
     padding-bottom: 90px;
   }
 
-  /* Studio overlay: account for stacked navbar (no categories row) */
-  .studio-overlay {
-    bottom: 110px;
-  }
-
   .studio-overlay-content {
     flex-direction: column;
     height: 100%;
-    width: 92%;
+    width: 100%;
+    max-width: 100vw;
     gap: 20px;
     overflow-y: auto;
+    overflow-x: hidden;
     margin-top: 0;
+    padding: 0 12px;
+    box-sizing: border-box;
   }
 
   .studio-overlay-left {
