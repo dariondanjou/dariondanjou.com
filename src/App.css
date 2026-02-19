@@ -1333,7 +1333,7 @@ textarea::-webkit-scrollbar-button:decrement {
   flex-direction: column;
   background: rgba(255, 255, 255, 0.03);
   border: none;
-  border-top: 3px solid #61dafb;
+  border-top: 3px solid #ffffff;
   text-align: left; /* Override inherited center alignment */
 }
 
