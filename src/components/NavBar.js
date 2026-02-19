@@ -141,33 +141,33 @@ function NavBar({ expandedImage, onToggleOverlay }) {
                         <img src={iconContact} alt="Sign up for updates" className="nav-icon" />
                     </button>
                     */}
-                    <a href="https://www.youtube.com/dariondanjou" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.youtube.com/dariondanjou" target="_blank" rel="noopener noreferrer" title="darion d'anjou youtube">
                         <img src={iconYouTube} alt="YouTube" className="nav-icon" />
                     </a>
-                    <a href="https://instagram.com/dariondanjou" target="_blank" rel="noopener noreferrer">
+                    <a href="https://instagram.com/dariondanjou" target="_blank" rel="noopener noreferrer" title="darion d'anjou instagram">
                         <img src={iconInstagram} alt="Instagram" className="nav-icon" />
                     </a>
-                    <a href="https://www.tiktok.com/dariondanjou" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.tiktok.com/dariondanjou" target="_blank" rel="noopener noreferrer" title="darion d'anjou tiktok">
                         <img src={iconTikTok} alt="TikTok" className="nav-icon" />
                     </a>
-                    <a href="https://x.com/dariondanjou" target="_blank" rel="noopener noreferrer">
+                    <a href="https://x.com/dariondanjou" target="_blank" rel="noopener noreferrer" title="darion d'anjou x">
                         <img src={iconX} alt="X" className="nav-icon" />
                     </a>
                     {/* Twitch hidden for now
-                    <a href="https://www.twitch.tv/dariondanjou" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.twitch.tv/dariondanjou" target="_blank" rel="noopener noreferrer" title="darion d'anjou twitch">
                         <img src={iconTwitch} alt="Twitch" className="nav-icon" />
                     </a>
                     */}
-                    <a href="https://www.linkedin.com/in/darion-d-anjou-39a3a926/" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.linkedin.com/in/darion-d-anjou-39a3a926/" target="_blank" rel="noopener noreferrer" title="darion d'anjou linkedin">
                         <img src={iconLinkedIn} alt="LinkedIn" className="nav-icon" />
                     </a>
-                    <a href="https://discord.gg/ejEBJss8gM" target="_blank" rel="noopener noreferrer">
+                    <a href="https://discord.gg/ejEBJss8gM" target="_blank" rel="noopener noreferrer" title="dariondanjou+ discord">
                         <img src={iconDiscord} alt="Discord" className="nav-icon" />
                     </a>
-                    <a href="https://chat.whatsapp.com/GelyV1XoEL9HVnlA9QrxDn" target="_blank" rel="noopener noreferrer">
+                    <a href="https://chat.whatsapp.com/GelyV1XoEL9HVnlA9QrxDn" target="_blank" rel="noopener noreferrer" title="ai makers generation whatsapp">
                         <img src={iconWhatsapp} alt="WhatsApp" className="nav-icon" />
                     </a>
-                    <button className="nav-link-button" onClick={() => toggleExpand("share")}>
+                    <button className="nav-link-button" onClick={() => toggleExpand("share")} title="share">
                         <img src={iconShare} alt="Share" className="nav-icon" />
                     </button>
                 </div>
