@@ -124,7 +124,12 @@ module.exports = async function handler(req, res) {
 
       // Send email
       let emailSent = false;
+      let emailError = null;
       try {
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+          throw new Error("EMAIL_USER or EMAIL_PASS not configured");
+        }
+
         const transporter = nodemailer.createTransport({
           host: process.env.EMAIL_HOST || "smtp.gmail.com",
           port: parseInt(process.env.EMAIL_PORT || "587", 10),
@@ -159,15 +164,22 @@ module.exports = async function handler(req, res) {
           ].join("\n"),
         });
         emailSent = true;
-      } catch (emailError) {
-        console.error("Email send error:", emailError);
+      } catch (err) {
+        emailError = err;
+        console.error("Email send error:", err.message, err.code, err.response);
       }
 
       // Continue the conversation with tool result
-      const toolResultContent =
-        dbSaved || emailSent
-          ? "Project inquiry submitted successfully. Email notification sent to Darion D'Anjou."
-          : "Project inquiry recorded. There was a minor issue with notifications but the inquiry has been saved.";
+      let toolResultContent;
+      if (dbSaved && emailSent) {
+        toolResultContent =
+          "Project inquiry submitted successfully. Email notification sent to Darion D'Anjou and a copy was CC'd to the client.";
+      } else if (dbSaved && !emailSent) {
+        toolResultContent = `Project inquiry saved to the database, but the email notification failed to send (${emailError?.message || "unknown error"}). Let the client know their inquiry was saved and the team will follow up, but the email summary could not be delivered right now.`;
+      } else {
+        toolResultContent =
+          "There was a problem submitting the inquiry. Please ask the client to email dariondanjou@gmail.com directly.";
+      }
 
       const followUp = await client.messages.create({
         model: "claude-sonnet-4-20250514",
