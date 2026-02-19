@@ -1566,6 +1566,7 @@ textarea::-webkit-scrollbar-button:decrement {
 
   .studio-overlay {
     overflow-x: hidden;
+    padding-top: env(safe-area-inset-top, 0px);
   }
 
   .studio-overlay-content {
@@ -1577,7 +1578,7 @@ textarea::-webkit-scrollbar-button:decrement {
     overflow-y: auto;
     overflow-x: hidden;
     margin-top: 0;
-    padding: 0 16px;
+    padding: 0;
     box-sizing: border-box;
   }
 
@@ -1595,9 +1596,28 @@ textarea::-webkit-scrollbar-button:decrement {
     box-sizing: border-box;
   }
 
+  .studio-headshot {
+    width: 120px;
+    height: 120px;
+    margin-left: 0;
+    margin-right: 12px;
+  }
+
   .studio-bio-section {
     max-width: 100%;
     box-sizing: border-box;
+    padding-right: 16px;
+    max-height: 120px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .studio-bio-section.bio-expanded {
+    max-height: none;
+  }
+
+  .studio-title {
+    padding-right: 0;
   }
 
   .studio-bio {
@@ -1611,6 +1631,7 @@ textarea::-webkit-scrollbar-button:decrement {
     word-wrap: break-word;
     overflow-wrap: break-word;
     box-sizing: border-box;
+    padding: 0 16px;
   }
 
   .studio-overlay-right {
@@ -1629,7 +1650,7 @@ textarea::-webkit-scrollbar-button:decrement {
   }
 
   .chat-messages {
-    padding: 16px;
+    padding: 12px 16px;
     max-width: 100%;
     box-sizing: border-box;
   }
@@ -1642,29 +1663,13 @@ textarea::-webkit-scrollbar-button:decrement {
   }
 
   .chat-message-user {
-    padding-right: 4px;
+    padding-right: 16px;
   }
 
   .chat-input-container {
     padding: 12px 16px;
     max-width: 100%;
     box-sizing: border-box;
-  }
-
-  .studio-headshot {
-    width: 120px;
-    height: 120px;
-  }
-
-  /* Bio truncation on mobile - clip to headshot height */
-  .studio-bio-section {
-    max-height: 120px; /* Match headshot height */
-    overflow: hidden;
-    position: relative;
-  }
-
-  .studio-bio-section.bio-expanded {
-    max-height: none;
   }
 
   .bio-toggle {
@@ -1680,7 +1685,7 @@ textarea::-webkit-scrollbar-button:decrement {
     cursor: pointer;
     position: absolute;
     bottom: 0;
-    right: 0;
+    right: 16px;
     background: black;
     padding: 0 4px;
   }
