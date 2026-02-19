@@ -14,7 +14,7 @@ function ChatWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Set welcome message on mount
+  // Set welcome message on mount and focus input after overlay animation
   useEffect(() => {
     if (hasGreeted.current) return;
     hasGreeted.current = true;
@@ -26,8 +26,15 @@ function ChatWidget() {
           "hey there! welcome to darion d'anjou ai creative studio. what kind of project do you want us to work on together?",
       },
     ]);
-    inputRef.current?.focus();
+    setTimeout(() => inputRef.current?.focus(), 400);
   }, []);
+
+  // Refocus input after bot responds
+  useEffect(() => {
+    if (!loading && !submitted) {
+      setTimeout(() => inputRef.current?.focus(), 50);
+    }
+  }, [loading, submitted]);
 
   const sendMessage = async () => {
     const trimmed = input.trim();
