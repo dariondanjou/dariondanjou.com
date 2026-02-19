@@ -7,6 +7,7 @@ function ChatWidget() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const hasGreeted = useRef(false);
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -25,15 +26,17 @@ function ChatWidget() {
           "hey there! welcome to darion d'anjou ai creative studio. what kind of project do you want us to work on together?",
       },
     ]);
-    setTimeout(() => inputRef.current?.focus(), 400);
-  }, []);
+    if (isDesktop) {
+      setTimeout(() => inputRef.current?.focus(), 400);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Refocus input after bot responds
+  // Refocus input after bot responds (desktop only)
   useEffect(() => {
-    if (!loading) {
+    if (!loading && isDesktop) {
       setTimeout(() => inputRef.current?.focus(), 50);
     }
-  }, [loading]);
+  }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sendMessage = async () => {
     const trimmed = input.trim();
@@ -79,7 +82,7 @@ function ChatWidget() {
     }
 
     setLoading(false);
-    inputRef.current?.focus();
+    if (isDesktop) inputRef.current?.focus();
   };
 
   const handleKeyDown = (e) => {
@@ -114,7 +117,6 @@ function ChatWidget() {
           ref={inputRef}
           type="text"
           className="chat-input"
-          autoFocus
           placeholder="type a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
