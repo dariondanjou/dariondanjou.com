@@ -4,6 +4,8 @@ const getSupabaseAdmin = require("./_lib/supabase");
 
 const SYSTEM_PROMPT = `You are the AI assistant for darion d'anjou ai creative studio. You help potential clients explore project ideas and submit inquiries.
 
+TODAY'S DATE: ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}.
+
 ABOUT THE STUDIO:
 darion d'anjou is an ai powered creative studio based in Atlanta, Georgia. The studio delivers world-class creative and technology solutions across film, commercial, digital, and AI-driven media.
 
@@ -91,7 +93,7 @@ module.exports = async function handler(req, res) {
 
   try {
     const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-opus-4-20250514",
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
       tools: TOOLS,
@@ -182,7 +184,7 @@ module.exports = async function handler(req, res) {
       }
 
       const followUp = await client.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-opus-4-20250514",
         max_tokens: 1024,
         system: SYSTEM_PROMPT,
         tools: TOOLS,
