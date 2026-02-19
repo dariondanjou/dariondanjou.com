@@ -144,7 +144,7 @@ module.exports = async function handler(req, res) {
           from: process.env.EMAIL_USER,
           to: "dariondanjou@gmail.com",
           cc: inquiry.email,
-          subject: `new project inquiry from ${inquiry.name}`,
+          subject: `dariondanjou.com - new project inquiry from ${inquiry.name}`,
           text: [
             `new project inquiry`,
             ``,
@@ -205,7 +205,7 @@ module.exports = async function handler(req, res) {
       const finalText = followUp.content.find((c) => c.type === "text");
       return res.json({
         message: finalText?.text || "your project inquiry has been submitted! we'll be in touch soon.",
-        submitted: true,
+        submitted: false,
       });
     }
 

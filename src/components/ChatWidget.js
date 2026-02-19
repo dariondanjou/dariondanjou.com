@@ -4,7 +4,6 @@ function ChatWidget() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const hasGreeted = useRef(false);
@@ -31,14 +30,14 @@ function ChatWidget() {
 
   // Refocus input after bot responds
   useEffect(() => {
-    if (!loading && !submitted) {
+    if (!loading) {
       setTimeout(() => inputRef.current?.focus(), 50);
     }
-  }, [loading, submitted]);
+  }, [loading]);
 
   const sendMessage = async () => {
     const trimmed = input.trim();
-    if (!trimmed || loading || submitted) return;
+    if (!trimmed || loading) return;
 
     const userMessage = { role: "user", content: trimmed };
     const updatedMessages = [...messages, userMessage];
@@ -66,9 +65,6 @@ function ChatWidget() {
           ...prev,
           { role: "assistant", content: data.message },
         ]);
-      }
-      if (data.submitted) {
-        setSubmitted(true);
       }
     } catch (error) {
       console.error("Chat error:", error);
@@ -119,16 +115,16 @@ function ChatWidget() {
           type="text"
           className="chat-input"
           autoFocus
-          placeholder={submitted ? "inquiry submitted!" : "type a message..."}
+          placeholder="type a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          disabled={loading || submitted}
+          disabled={loading}
         />
         <button
           className="chat-send"
           onClick={sendMessage}
-          disabled={loading || submitted || !input.trim()}
+          disabled={loading || !input.trim()}
         >
           &#x2192;
         </button>
