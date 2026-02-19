@@ -41,7 +41,7 @@ function StudioOverlay({ isOpen, onClose }) {
                 className="bio-toggle"
                 onClick={() => setBioExpanded(!bioExpanded)}
               >
-                {bioExpanded ? "less" : "more..."}
+                {bioExpanded ? "less..." : "more..."}
               </button>
             </div>
             <div className="studio-description">{STUDIO_DESCRIPTION}</div>

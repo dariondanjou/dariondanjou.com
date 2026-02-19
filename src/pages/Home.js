@@ -9,6 +9,7 @@ function Home() {
     const [hoveredImage, setHoveredImage] = useState(null);
     const [hoverTimeout, setHoverTimeout] = useState(null);
     const containerRef = useRef(null);
+    const touchStartRef = useRef(null);
 
     useEffect(() => {
         axios.get("/api/images")
@@ -60,14 +61,39 @@ function Home() {
         }
     }, [expandedImageIndex, images.length]);
 
+    const handleTouchStart = useCallback((e) => {
+        if (expandedImageIndex !== null) {
+            touchStartRef.current = e.touches[0].clientX;
+        }
+    }, [expandedImageIndex]);
+
+    const handleTouchEnd = useCallback((e) => {
+        if (expandedImageIndex !== null && touchStartRef.current !== null) {
+            const diff = touchStartRef.current - e.changedTouches[0].clientX;
+            const threshold = 50;
+            if (diff > threshold) {
+                // Swipe left — next image
+                setExpandedImageIndex((prev) => (prev + 1) % images.length);
+            } else if (diff < -threshold) {
+                // Swipe right — previous image
+                setExpandedImageIndex((prev) => (prev - 1 + images.length) % images.length);
+            }
+            touchStartRef.current = null;
+        }
+    }, [expandedImageIndex, images.length]);
+
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('wheel', handleWheel);
+        window.addEventListener('touchstart', handleTouchStart);
+        window.addEventListener('touchend', handleTouchEnd);
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('wheel', handleWheel);
+            window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchend', handleTouchEnd);
         };
-    }, [handleKeyDown, handleWheel]);
+    }, [handleKeyDown, handleWheel, handleTouchStart, handleTouchEnd]);
 
     return (
         <>
@@ -100,7 +126,7 @@ function Home() {
             </div>
 
             {expandedImageIndex !== null && (
-                <div className="fullscreen-image-container" onClick={closeImage}>
+                <div className="fullscreen-image-container" onClick={(e) => { if (!touchStartRef.current) closeImage(); }}>
                     <img src={virtualImages[expandedImageIndex].url} alt="Expanded" className="fullscreen-image" />
                     <div className="fullscreen-info">
                         <p className="expanded-description">{virtualImages[expandedImageIndex].description}</p>

@@ -21,6 +21,19 @@ html, body {
 
 * {
   font-family: 'Roboto Mono', monospace !important;
+  cursor: default;
+}
+
+a, button, input, textarea, select, [role="button"] {
+  cursor: pointer;
+}
+
+input, textarea {
+  cursor: text;
+}
+
+*, *::before, *::after {
+  caret-color: white;
 }
 
 input:focus {
@@ -1564,6 +1577,7 @@ textarea::-webkit-scrollbar-button:decrement {
   .studio-overlay-right {
     width: 100%;
     min-height: 400px;
+    flex-shrink: 0;
   }
 
   .studio-headshot {
@@ -1610,6 +1624,21 @@ textarea::-webkit-scrollbar-button:decrement {
     max-height: none;
     height: 400px;
     max-width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-messages {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .chat-input-container {
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
   }
 
   /* Contact page responsive */
