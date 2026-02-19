@@ -340,7 +340,7 @@ input:focus {
   max-width: 100%; /* Prevent overflow into center */
   object-fit: contain;
   object-position: left top;
-  margin: 4px 0 0 0; /* Shift down 4px */
+  margin: 6px 0 0 0; /* Shift down 6px */
   cursor: pointer; /* Clickable to expand */
 }
 
@@ -358,7 +358,7 @@ input:focus {
   max-width: 50%; /* Half width */
   object-fit: contain;
   object-position: center top;
-  margin: 0;
+  margin: 10px 0 0 0; /* Shift down 10px */
 }
 
 /* ✅ Right Side Icons - Properly Aligned */
