@@ -135,15 +135,18 @@ function NavBar({ expandedImage, onToggleOverlay }) {
                     </div>
                 )}
 
+                <div className="nav-chat">
+                    <button className="nav-link-button" onClick={handleLogoClick} title="chat with darion d'anjou ai">
+                        <img src="/icon-chat.png" alt="Chat" className="nav-icon nav-icon-chat" />
+                    </button>
+                </div>
+
                 <div className="nav-right">
                     {/* Email icon hidden for now
                     <button className="nav-link-button" onClick={() => toggleExpand("email")}>
                         <img src={iconContact} alt="Sign up for updates" className="nav-icon" />
                     </button>
                     */}
-                    <button className="nav-link-button" onClick={handleLogoClick} title="chat with darion d'anjou ai">
-                        <img src="/icon-chat.png" alt="Chat" className="nav-icon nav-icon-chat" />
-                    </button>
                     <a href="https://www.youtube.com/dariondanjou" target="_blank" rel="noopener noreferrer" title="darion d'anjou youtube">
                         <img src={iconYouTube} alt="YouTube" className="nav-icon" />
                     </a>

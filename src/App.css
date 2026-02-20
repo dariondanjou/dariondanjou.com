@@ -396,6 +396,13 @@ input:focus {
   cursor: pointer;
 }
 
+/* Chat icon container - inline on desktop */
+.nav-chat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Chat icon - always fully visible */
 .nav-icon-chat {
   opacity: 1 !important;
@@ -1544,6 +1551,18 @@ textarea::-webkit-scrollbar-button:decrement {
 
   .nav-categories {
     height: 50px;
+  }
+
+  .nav-chat {
+    width: 100%;
+    order: 2;
+    display: flex;
+    justify-content: center;
+    padding: 4px 0;
+  }
+
+  .nav-chat .nav-icon-chat {
+    height: 28px;
   }
 
   .nav-right {
