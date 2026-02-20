@@ -396,6 +396,11 @@ input:focus {
   cursor: pointer;
 }
 
+/* Chat icon - always fully visible */
+.nav-icon-chat {
+  opacity: 1 !important;
+}
+
 /* ✅ Anchor and button wrappers in nav-right - consistent alignment */
 .nav-right a {
   display: inline-flex;
