@@ -401,7 +401,7 @@ input:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 /* Chat icon - always fully visible */
