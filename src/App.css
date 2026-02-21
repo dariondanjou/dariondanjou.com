@@ -407,6 +407,7 @@ input:focus {
 /* Chat icon - always fully visible */
 .nav-icon-chat {
   opacity: 1 !important;
+  height: 33px;
 }
 
 /* ✅ Anchor and button wrappers in nav-right - consistent alignment */
