@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { NW_PROJECT, NW_SCENES, NW_DEFAULT_DONE, NW_ACTIVE_ID, NW_SCRIPT_URL, NW_SCRIPT_LABEL } from "./NextWeek.data";
+import { Link, useNavigate } from "react-router-dom";
+import { NW_PROJECT, NW_SCENES, NW_SCRIPT_URL, NW_SCRIPT_LABEL } from "./NextWeek.data";
+import { useShotOverrides, STATUS } from "./NextWeek.state";
 import "./NextWeek.css";
 
 const NW = {
@@ -94,7 +96,10 @@ function Editable({ value, onChange, multiline = false, className = "", style = 
 // ─── checkbox ───────────────────────────────────────────────
 function ShotCheck({ size = 44, checked, active, onClick }) {
   return (
-    <button onClick={onClick} aria-label={checked ? "Mark unfilmed" : "Mark filmed"} style={{
+    <button
+      onClick={(e) => { e.stopPropagation(); onClick && onClick(); }}
+      aria-label={checked ? "Mark unfilmed" : "Mark filmed"}
+      style={{
       width: size, height: size, borderRadius: size * 0.22,
       background: checked ? NW.text : (active ? NW.blue : NW.surface),
       border: `2px solid ${checked ? NW.text : (active ? NW.blueDeep : NW.text)}`,
@@ -112,9 +117,14 @@ function ShotCheck({ size = 44, checked, active, onClick }) {
 }
 
 // ─── storyboard frame (real image when available, fallback placeholder) ──
-function Storyboard({ shot, completed, active, onToggle }) {
-  const { seed = 0, id: code, cam, lens, vfx } = shot;
-  const src = SHOT_IMG[code];
+// Prefers shot.imgOverride (user upload, data URL) over the bundled
+// numbered storyboard, then falls back to the procedural placeholder.
+// `onOpen`, if provided, makes the frame clickable to navigate to the
+// shot detail page; the checkbox stops propagation so toggling
+// completion never triggers navigation.
+function Storyboard({ shot, completed, active, onToggle, onOpen }) {
+  const { seed = 0, id: code, cam, lens, vfx, imgOverride } = shot;
+  const src = imgOverride || SHOT_IMG[code];
 
   // Procedural fallback palettes (for shots with no image yet)
   const palettes = [
@@ -137,12 +147,25 @@ function Storyboard({ shot, completed, active, onToggle }) {
   const dim = completed;
 
   return (
-    <div style={{
-      position: "relative", width: "100%", aspectRatio: "9 / 16",
-      background: src ? NW.text : `linear-gradient(180deg, ${p.a} 0%, ${p.b} 100%)`,
-      borderRadius: 4, overflow: "hidden",
-      boxShadow: "inset 0 0 0 1px rgba(15,14,12,0.10)",
-    }}>
+    <div
+      onClick={onOpen ? (e) => {
+        // Ignore bubbled clicks from controls (checkbox calls stopPropagation,
+        // but defensively re-check by walking the path for any <button>).
+        if (e.target.closest && e.target.closest("button")) return;
+        onOpen();
+      } : undefined}
+      role={onOpen ? "link" : undefined}
+      tabIndex={onOpen ? 0 : undefined}
+      onKeyDown={onOpen ? (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(); }
+      } : undefined}
+      style={{
+        position: "relative", width: "100%", aspectRatio: "9 / 16",
+        background: src ? NW.text : `linear-gradient(180deg, ${p.a} 0%, ${p.b} 100%)`,
+        borderRadius: 4, overflow: "hidden",
+        boxShadow: "inset 0 0 0 1px rgba(15,14,12,0.10)",
+        cursor: onOpen ? "pointer" : "default",
+      }}>
       {src ? (
         <img
           src={src}
@@ -248,20 +271,125 @@ function VfxBadge({ tag }) {
   );
 }
 
+// Compact status pill (Pending / Filmed / Skipped) for the card action row.
+function StatusPill({ label, tone }) {
+  const toneStyles = {
+    pending: { bg: "rgba(15,14,12,0.08)", color: NW.text, border: "rgba(15,14,12,0.18)" },
+    done:    { bg: NW.doneSoft, color: NW.done, border: NW.done },
+    skipped: { bg: "rgba(15,14,12,0.06)", color: NW.textDim, border: NW.borderStrong },
+  };
+  const t = toneStyles[tone] || toneStyles.pending;
+  return (
+    <span style={{
+      padding: "3px 8px",
+      fontFamily: NW.mono, fontSize: 10, fontWeight: 700,
+      letterSpacing: 1.2, textTransform: "uppercase",
+      background: t.bg, color: t.color,
+      border: `1px solid ${t.border}`,
+    }}>{label}</span>
+  );
+}
+
+function ActionButton({ children, onClick, active = false, tone = "default" }) {
+  const isDanger = tone === "danger";
+  return (
+    <button
+      onClick={(e) => { e.stopPropagation(); onClick && onClick(); }}
+      style={{
+        padding: "4px 8px",
+        background: active ? NW.text : "transparent",
+        color: active ? NW.bg : (isDanger ? NW.env : NW.text),
+        border: `1.5px solid ${active ? NW.text : (isDanger ? NW.env : NW.borderStrong)}`,
+        fontFamily: NW.mono, fontSize: 10, fontWeight: 700,
+        letterSpacing: 0.8, textTransform: "uppercase",
+        cursor: "pointer", borderRadius: 2,
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
 // ─── shot card ──────────────────────────────────────────────
-function ShotCard({ shot, completed, active, onToggle, onEdit }) {
+function ShotCard({ shot, status, active, onToggle, onSetStatus, onSetImage, onEdit, onOpen }) {
+  const completed = status === STATUS.COMPLETED;
+  const skipped = status === STATUS.SKIPPED;
+  const fileInputRef = useRef(null);
+  const handlePickImage = (e) => {
+    e.stopPropagation();
+    fileInputRef.current?.click();
+  };
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert("Please choose an image file.");
+      e.target.value = "";
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => onSetImage(reader.result);
+    reader.onerror = () => alert("Failed to read image.");
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
   return (
     <article style={{
       position: "relative",
       background: NW.surface,
-      border: `2px solid ${active ? NW.blueDeep : NW.text}`,
+      border: `2px solid ${active ? NW.blueDeep : (skipped ? NW.textDim : NW.text)}`,
       borderRadius: 4,
       boxShadow: active ? `6px 6px 0 ${NW.blue}` : `4px 4px 0 ${NW.text}`,
       transition: "transform 0.15s, box-shadow 0.15s",
-      opacity: completed ? 0.55 : 1,
+      opacity: completed ? 0.55 : (skipped ? 0.75 : 1),
     }}>
       <div style={{ padding: 10, paddingBottom: 0 }}>
-        <Storyboard shot={shot} completed={completed} active={active} onToggle={onToggle}/>
+        <Storyboard
+          shot={shot}
+          completed={completed}
+          active={active}
+          onToggle={onToggle}
+          onOpen={onOpen}
+        />
+      </div>
+
+      {/* Status / action row */}
+      <div style={{
+        padding: "10px 16px 0", display: "flex", alignItems: "center",
+        gap: 6, flexWrap: "wrap",
+      }}>
+        <StatusPill
+          label={completed ? "Filmed" : skipped ? "Skipped" : "Pending"}
+          tone={completed ? "done" : skipped ? "skipped" : "pending"}
+        />
+        <div style={{ flex: 1 }}/>
+        <ActionButton
+          onClick={() => onSetStatus(skipped ? STATUS.PENDING : STATUS.SKIPPED)}
+          active={skipped}
+        >
+          {skipped ? "Unskip" : "Skip"}
+        </ActionButton>
+        <ActionButton onClick={handlePickImage}>
+          {shot.imgOverride ? "Replace image" : "Upload image"}
+        </ActionButton>
+        <ActionButton
+          onClick={() => {
+            if (window.confirm(`Delete shot ${shot.id}? It will be hidden until you toggle Deleted in the filter.`)) {
+              onSetStatus(STATUS.DELETED);
+            }
+          }}
+          tone="danger"
+        >
+          Delete
+        </ActionButton>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
       </div>
 
       <div style={{ padding: "14px 16px 16px" }}>
@@ -703,7 +831,13 @@ function SceneRail({ scenes, completed, onJump }) {
 }
 
 // ─── toolbar ────────────────────────────────────────────────
-function ToolBar({ filter, setFilter, sceneFilter, setSceneFilter, scenes, totalDone, totalShots }) {
+function ToolBar({
+  filter, setFilter,
+  sceneFilter, setSceneFilter,
+  showDeleted, setShowDeleted,
+  scenes, counts,
+}) {
+  const { total, done, todo, skipped, deleted } = counts;
   const statusBtn = (key, label, count) => (
     <button key={key} onClick={() => setFilter(key)} style={{
       padding: "8px 14px", borderRadius: 0,
@@ -766,17 +900,30 @@ function ToolBar({ filter, setFilter, sceneFilter, setSceneFilter, scenes, total
             fontFamily: NW.mono, fontSize: 10.5, fontWeight: 700, color: NW.textDim,
             letterSpacing: 1.4, textTransform: "uppercase",
           }}>Status</div>
-          <div style={{ display: "flex", gap: 8 }}>
-            {statusBtn("all",  "All shots", totalShots)}
-            {statusBtn("todo", "Remaining", totalShots - totalDone)}
-            {statusBtn("done", "Filmed",    totalDone)}
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {statusBtn("all",     "All",       total)}
+            {statusBtn("todo",    "Remaining", todo)}
+            {statusBtn("done",    "Filmed",    done)}
+            {statusBtn("skipped", "Skipped",   skipped)}
           </div>
         </div>
         <div style={{
-          display: "flex", alignItems: "center", gap: 8,
+          display: "flex", alignItems: "center", gap: 12,
           fontFamily: NW.mono, fontSize: 11, fontWeight: 600, color: NW.textDim, letterSpacing: 0.4,
         }}>
-          <span>Tap any text to edit · check box to mark filmed</span>
+          <label style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            cursor: "pointer", textTransform: "uppercase", letterSpacing: 1.2, fontSize: 10,
+          }}>
+            <input
+              type="checkbox"
+              checked={showDeleted}
+              onChange={e => setShowDeleted(e.target.checked)}
+              style={{ accentColor: NW.blueDeep }}
+            />
+            Show deleted ({deleted})
+          </label>
+          <span style={{ display: "none" }}>Tap any text to edit · check box to mark filmed</span>
         </div>
       </div>
       <div style={{
@@ -868,35 +1015,40 @@ function SiteFooter({ project }) {
 
 // ─── page ───────────────────────────────────────────────────
 export default function NextWeek() {
-  const [completed, setCompleted] = useState(() => new Set(NW_DEFAULT_DONE));
-  const [active, setActive] = useState(NW_ACTIVE_ID);
-  const [shots, setShots] = useState(() => {
-    const map = {};
-    NW_SCENES.forEach(sc => sc.shots.forEach(s => { map[s.id] = { ...s, notes: "" }; }));
-    return map;
-  });
+  const navigate = useNavigate();
+  const { overrides, setStatus, setImage, setField, getMerged } = useShotOverrides();
+  const [active] = useState(null);
   const [filter, setFilter] = useState("all");
-  const [sceneFilter, setSceneFilter] = useState(null); // null = all scenes, otherwise scene number
+  const [sceneFilter, setSceneFilter] = useState(null);
+  const [showDeleted, setShowDeleted] = useState(false);
 
-  const toggle = (id) => {
-    setCompleted(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
+  const toggleCompleted = (id) => {
+    const cur = overrides[id]?.status;
+    setStatus(id, cur === STATUS.COMPLETED ? STATUS.PENDING : STATUS.COMPLETED);
+  };
+
+  // Aggregate counts across all shots — drives the hero counter and the
+  // toolbar filter chip badges.
+  const counts = useMemo(() => {
+    let done = 0, skipped = 0, deleted = 0, pending = 0;
+    FLAT_SHOTS.forEach(s => {
+      const st = overrides[s.id]?.status || STATUS.PENDING;
+      if (st === STATUS.COMPLETED) done++;
+      else if (st === STATUS.SKIPPED) skipped++;
+      else if (st === STATUS.DELETED) deleted++;
+      else pending++;
     });
-    setActive(prevActive => prevActive === id ? null : prevActive);
-  };
-  const edit = (id, field, value) => {
-    setShots(prev => ({ ...prev, [id]: { ...prev[id], [field]: value } }));
-  };
+    return {
+      total: FLAT_SHOTS.length,
+      done, skipped, deleted,
+      todo: pending,
+    };
+  }, [overrides]);
 
-  const totalShots = useMemo(() => NW_SCENES.reduce((a, s) => a + s.shots.length, 0), []);
-  const totalDone = completed.size;
-  const pct = Math.round((totalDone / totalShots) * 100);
+  const totalShots = counts.total;
+  const totalDone = counts.done;
+  const pct = totalShots ? Math.round((totalDone / totalShots) * 100) : 0;
 
-  // Set <title>, and tag <html> so route-scoped CSS can undo the
-  // site-wide `html, body { overflow: hidden }` and `.page-content`
-  // bottom padding. Cleaned up when navigating away.
   useEffect(() => {
     const prev = document.title;
     document.title = "Next Week · Shot List — Darion D'Anjou";
@@ -907,6 +1059,14 @@ export default function NextWeek() {
     };
   }, []);
 
+  const completedSet = useMemo(() => {
+    const s = new Set();
+    Object.entries(overrides).forEach(([id, o]) => {
+      if (o.status === STATUS.COMPLETED) s.add(id);
+    });
+    return s;
+  }, [overrides]);
+
   return (
     <div className="nw-page">
       <SiteNav/>
@@ -914,10 +1074,8 @@ export default function NextWeek() {
       <PackageStrip cameras={NW_PROJECT.cameraPackage}/>
       <SceneRail
         scenes={NW_SCENES}
-        completed={completed}
+        completed={completedSet}
         onJump={(n) => {
-          // Clear any active scene filter so the anchor target is in the DOM,
-          // then scroll on the next paint.
           setSceneFilter(null);
           requestAnimationFrame(() => {
             const el = document.getElementById(`scene-${n}`);
@@ -928,33 +1086,40 @@ export default function NextWeek() {
       <ToolBar
         filter={filter} setFilter={setFilter}
         sceneFilter={sceneFilter} setSceneFilter={setSceneFilter}
+        showDeleted={showDeleted} setShowDeleted={setShowDeleted}
         scenes={NW_SCENES}
-        totalDone={totalDone} totalShots={totalShots}
+        counts={counts}
       />
 
       <main className="nw-shell">
         {NW_SCENES.filter(s => sceneFilter == null || s.n === sceneFilter).map(scene => {
           const visibleShots = scene.shots.filter(s => {
-            if (filter === "todo") return !completed.has(s.id);
-            if (filter === "done") return completed.has(s.id);
+            const st = overrides[s.id]?.status || STATUS.PENDING;
+            if (st === STATUS.DELETED) return showDeleted;
+            if (filter === "todo")    return st === STATUS.PENDING;
+            if (filter === "done")    return st === STATUS.COMPLETED;
+            if (filter === "skipped") return st === STATUS.SKIPPED;
             return true;
           });
-          const doneInScene = scene.shots.filter(s => completed.has(s.id)).length;
+          const doneInScene = scene.shots.filter(s => completedSet.has(s.id)).length;
           if (visibleShots.length === 0) return null;
           return (
             <section key={scene.n}>
               <SceneHeader scene={scene} doneCount={doneInScene} totalCount={scene.shots.length}/>
               <div className="nw-grid">
                 {visibleShots.map(s => {
-                  const data = shots[s.id];
+                  const data = getMerged(s.id);
                   return (
                     <ShotCard
                       key={s.id}
                       shot={data}
-                      completed={completed.has(s.id)}
+                      status={data.status}
                       active={active === s.id}
-                      onToggle={() => toggle(s.id)}
-                      onEdit={(field, value) => edit(s.id, field, value)}
+                      onToggle={() => toggleCompleted(s.id)}
+                      onSetStatus={(st) => setStatus(s.id, st)}
+                      onSetImage={(dataUrl) => setImage(s.id, dataUrl)}
+                      onEdit={(field, value) => setField(s.id, field, value)}
+                      onOpen={() => navigate(`/nextweek/shot/${s.id}`)}
                     />
                   );
                 })}

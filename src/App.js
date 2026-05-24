@@ -5,6 +5,7 @@ import Contact from "./pages/Contact";
 import Training from "./pages/Training";
 import Admin from "./pages/Admin";
 import NextWeek from "./pages/NextWeek";
+import NextWeekShot from "./pages/NextWeekShot";
 import NavBar from "./components/NavBar";
 import StudioOverlay from "./components/StudioOverlay";
 import "./App.css";
@@ -12,7 +13,9 @@ import "./App.css";
 function App() {
     const [overlayOpen, setOverlayOpen] = useState(false);
     const location = useLocation();
-    const isNextWeek = location.pathname.startsWith("/nextweek");
+    // Match /nextweek and /nextweek/* — the shot list page hides the
+    // site's bottom nav and uses its own page chrome.
+    const isNextWeek = location.pathname === "/nextweek" || location.pathname.startsWith("/nextweek/");
 
     const handleToggleOverlay = () => {
         setOverlayOpen((prev) => !prev);
@@ -32,6 +35,7 @@ function App() {
                     <Route path="/training" element={<Training />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/nextweek" element={<NextWeek />} />
+                    <Route path="/nextweek/shot/:id" element={<NextWeekShot />} />
                 </Routes>
             </div>
 
