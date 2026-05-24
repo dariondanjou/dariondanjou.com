@@ -406,7 +406,7 @@ function SiteNav() {
           <span style={{
             fontFamily: NW.mono, fontSize: 10, fontWeight: 600, color: NW.textDim,
             letterSpacing: 1.4, textTransform: "uppercase",
-          }}>Director · DP</span>
+          }}>Director</span>
         </a>
         <div className="nw-nav-links" style={{
           display: "flex", alignItems: "center", gap: 24,
@@ -611,7 +611,7 @@ function PackageStrip({ cameras }) {
 function shortenTitle(t) {
   return t.split(" · ")[0].replace("Stephanie Day arrives at ", "").replace("Stephanie ", "");
 }
-function SceneRail({ scenes, completed }) {
+function SceneRail({ scenes, completed, onJump }) {
   return (
     <div className="nw-shell" style={{ padding: "24px 0 8px" }}>
       <div style={{
@@ -625,7 +625,15 @@ function SceneRail({ scenes, completed }) {
           const isDone = done === all;
           const inProgress = done > 0 && done < all;
           return (
-            <a key={s.n} href={`#scene-${s.n}`} className="nw-scene-chip" style={{
+            <a
+              key={s.n}
+              href={`#scene-${s.n}`}
+              className="nw-scene-chip"
+              onClick={e => {
+                e.preventDefault();
+                onJump && onJump(s.n);
+              }}
+              style={{
               display: "flex", alignItems: "center", gap: 10,
               padding: "10px 14px", borderRadius: 0, textDecoration: "none",
               background: NW.surface, border: `2px solid ${NW.text}`,
@@ -657,8 +665,8 @@ function SceneRail({ scenes, completed }) {
 }
 
 // ─── toolbar ────────────────────────────────────────────────
-function ToolBar({ filter, setFilter, totalDone, totalShots }) {
-  const btn = (key, label, count) => (
+function ToolBar({ filter, setFilter, sceneFilter, setSceneFilter, scenes, totalDone, totalShots }) {
+  const statusBtn = (key, label, count) => (
     <button key={key} onClick={() => setFilter(key)} style={{
       padding: "8px 14px", borderRadius: 0,
       background: filter === key ? NW.text : "transparent",
@@ -676,6 +684,32 @@ function ToolBar({ filter, setFilter, totalDone, totalShots }) {
       }}>{count}</span>
     </button>
   );
+
+  const sceneBtn = (n) => {
+    const isActive = sceneFilter === n;
+    const isAll = n === null;
+    return (
+      <button
+        key={isAll ? "all" : n}
+        onClick={() => setSceneFilter(n)}
+        style={{
+          padding: isAll ? "6px 12px" : "6px 10px",
+          minWidth: isAll ? undefined : 36,
+          borderRadius: 0,
+          background: isActive ? NW.blueDeep : "transparent",
+          border: `2px solid ${isActive ? NW.blueDeep : NW.text}`,
+          color: isActive ? NW.bg : NW.text,
+          fontFamily: NW.mono, fontSize: 11, fontWeight: 800,
+          cursor: "pointer", letterSpacing: 0.6,
+          textTransform: "uppercase",
+          fontVariantNumeric: "tabular-nums",
+        }}
+      >
+        {isAll ? "All scenes" : n.toString().padStart(2, "0")}
+      </button>
+    );
+  };
+
   return (
     <div className="nw-shell" style={{
       position: "sticky", top: 55, zIndex: 20,
@@ -683,25 +717,41 @@ function ToolBar({ filter, setFilter, totalDone, totalShots }) {
       background: "rgba(236,230,216,0.92)", backdropFilter: "blur(16px)",
       WebkitBackdropFilter: "blur(16px)",
       borderBottom: `2px solid ${NW.text}`,
-      display: "flex", alignItems: "center", justifyContent: "space-between",
-      gap: 14, flexWrap: "wrap", marginTop: 12,
+      display: "flex", flexDirection: "column", gap: 10, marginTop: 12,
     }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        gap: 14, flexWrap: "wrap",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{
+            fontFamily: NW.mono, fontSize: 10.5, fontWeight: 700, color: NW.textDim,
+            letterSpacing: 1.4, textTransform: "uppercase",
+          }}>Status</div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {statusBtn("all",  "All shots", totalShots)}
+            {statusBtn("todo", "Remaining", totalShots - totalDone)}
+            {statusBtn("done", "Filmed",    totalDone)}
+          </div>
+        </div>
         <div style={{
-          fontFamily: NW.mono, fontSize: 10.5, fontWeight: 700, color: NW.textDim,
-          letterSpacing: 1.4, textTransform: "uppercase",
-        }}>Filter</div>
-        <div style={{ display: "flex", gap: 8 }}>
-          {btn("all",  "All shots", totalShots)}
-          {btn("todo", "Remaining", totalShots - totalDone)}
-          {btn("done", "Filmed",    totalDone)}
+          display: "flex", alignItems: "center", gap: 8,
+          fontFamily: NW.mono, fontSize: 11, fontWeight: 600, color: NW.textDim, letterSpacing: 0.4,
+        }}>
+          <span>Tap any text to edit · check box to mark filmed</span>
         </div>
       </div>
       <div style={{
-        display: "flex", alignItems: "center", gap: 8,
-        fontFamily: NW.mono, fontSize: 11, fontWeight: 600, color: NW.textDim, letterSpacing: 0.4,
+        display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap",
       }}>
-        <span>Tap any text to edit · check box to mark filmed</span>
+        <div style={{
+          fontFamily: NW.mono, fontSize: 10.5, fontWeight: 700, color: NW.textDim,
+          letterSpacing: 1.4, textTransform: "uppercase",
+        }}>Scene</div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {sceneBtn(null)}
+          {scenes.map(s => sceneBtn(s.n))}
+        </div>
       </div>
     </div>
   );
@@ -726,7 +776,7 @@ function SiteFooter({ project }) {
           <div style={{
             fontFamily: NW.mono, fontSize: 11, fontWeight: 700, color: NW.blue,
             letterSpacing: 1.4, marginTop: 14, textTransform: "uppercase",
-          }}>Director of photography · Los Angeles</div>
+          }}>Director · Los Angeles</div>
           <div style={{
             fontFamily: NW.ui, fontSize: 13.5, color: "rgba(236,230,216,0.7)", lineHeight: 1.55,
             marginTop: 22, maxWidth: 480,
@@ -737,7 +787,7 @@ function SiteFooter({ project }) {
         </div>
         <div>
           <div style={{ fontFamily: NW.mono, fontSize: 10, fontWeight: 700, color: NW.blue, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 14 }}>Crew</div>
-          {["Director · Darion D’Anjou", "DP · Darion D’Anjou", "AD · TBD", "1st AC · TBD", "Gaffer · TBD"].map(l => (
+          {["Director · Darion D’Anjou", "DP · TBD", "AD · TBD", "1st AC · TBD", "Gaffer · TBD"].map(l => (
             <div key={l} style={{ fontFamily: NW.ui, fontSize: 13.5, fontWeight: 500, color: "rgba(236,230,216,0.8)", marginBottom: 5 }}>{l}</div>
           ))}
         </div>
@@ -788,6 +838,7 @@ export default function NextWeek() {
     return map;
   });
   const [filter, setFilter] = useState("all");
+  const [sceneFilter, setSceneFilter] = useState(null); // null = all scenes, otherwise scene number
 
   const toggle = (id) => {
     setCompleted(prev => {
@@ -823,11 +874,28 @@ export default function NextWeek() {
       <SiteNav/>
       <Hero project={NW_PROJECT} totalDone={totalDone} totalShots={totalShots} pct={pct}/>
       <PackageStrip cameras={NW_PROJECT.cameraPackage}/>
-      <SceneRail scenes={NW_SCENES} completed={completed}/>
-      <ToolBar filter={filter} setFilter={setFilter} totalDone={totalDone} totalShots={totalShots}/>
+      <SceneRail
+        scenes={NW_SCENES}
+        completed={completed}
+        onJump={(n) => {
+          // Clear any active scene filter so the anchor target is in the DOM,
+          // then scroll on the next paint.
+          setSceneFilter(null);
+          requestAnimationFrame(() => {
+            const el = document.getElementById(`scene-${n}`);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        }}
+      />
+      <ToolBar
+        filter={filter} setFilter={setFilter}
+        sceneFilter={sceneFilter} setSceneFilter={setSceneFilter}
+        scenes={NW_SCENES}
+        totalDone={totalDone} totalShots={totalShots}
+      />
 
       <main className="nw-shell">
-        {NW_SCENES.map(scene => {
+        {NW_SCENES.filter(s => sceneFilter == null || s.n === sceneFilter).map(scene => {
           const visibleShots = scene.shots.filter(s => {
             if (filter === "todo") return !completed.has(s.id);
             if (filter === "done") return completed.has(s.id);
