@@ -27,15 +27,21 @@ const NW = {
 };
 
 // Build sequential index → storyboard image map.
-// Images live in /public/nextweek/images/001.png … 049.png.
+// Images live in /public/nextweek/images/. Most are NNN.png; a few use
+// descriptive suffixes — listed below so the lookup stays explicit.
 const FLAT_SHOTS = NW_SCENES.flatMap(sc => sc.shots);
-const IMG_COUNT = 49;
+const IMG_COUNT = 131;
+const IMG_OVERRIDES = {
+  123: "123-ECU-hand.png",
+  131: "131-B5-ServerWatching.png",
+};
 const SHOT_IMG = (() => {
   const map = {};
   FLAT_SHOTS.forEach((s, i) => {
     const n = i + 1;
     if (n <= IMG_COUNT) {
-      map[s.id] = `/nextweek/images/${String(n).padStart(3, "0")}.png`;
+      const file = IMG_OVERRIDES[n] || `${String(n).padStart(3, "0")}.png`;
+      map[s.id] = `/nextweek/images/${file}`;
     }
   });
   return map;
