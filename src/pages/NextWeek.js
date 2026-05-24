@@ -961,7 +961,7 @@ function SiteFooter({ project }) {
           <div style={{
             fontFamily: NW.mono, fontSize: 11, fontWeight: 700, color: NW.blue,
             letterSpacing: 1.4, marginTop: 14, textTransform: "uppercase",
-          }}>Director · Los Angeles</div>
+          }}>Director · Atlanta</div>
           <div style={{
             fontFamily: NW.ui, fontSize: 13.5, color: "rgba(236,230,216,0.7)", lineHeight: 1.55,
             marginTop: 22, maxWidth: 480,
