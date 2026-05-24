@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { NW_PROJECT, NW_SCENES, NW_SCRIPT_URL, NW_SCRIPT_LABEL } from "./NextWeek.data";
+import { NW_PROJECT, NW_SCENES, NW_SCRIPT_URL, NW_SCRIPT_LABEL, NW_SCRIPT_LABELED_URL, NW_SCRIPT_LABELED_LABEL } from "./NextWeek.data";
 import { useShotOverrides, STATUS } from "./NextWeek.state";
 import "./NextWeek.css";
 
@@ -979,7 +979,8 @@ function SiteFooter({ project }) {
         <div>
           <div style={{ fontFamily: NW.mono, fontSize: 10, fontWeight: 700, color: NW.blue, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 14 }}>Links</div>
           {[
-            { label: "Script · Production Final", href: NW_SCRIPT_URL },
+            { label: NW_SCRIPT_LABEL, href: NW_SCRIPT_URL },
+            { label: NW_SCRIPT_LABELED_LABEL, href: NW_SCRIPT_LABELED_URL },
             { label: "Lookbook", href: null },
             { label: "Storyboard PDF", href: null },
             { label: "Schedule", href: null },

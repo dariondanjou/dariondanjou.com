@@ -5,6 +5,11 @@ export const NW_SCRIPT_URL =
   "https://drive.google.com/file/d/1anxwT68bHOqBXtb1IAjWDfeaplEaATcf/view?usp=drive_link";
 export const NW_SCRIPT_LABEL = "Script · Production Final";
 
+// Site-hosted, scene-labeled revision of the script generated from the
+// FDX. See perpendicular/Shot List App/label_script_scenes.py.
+export const NW_SCRIPT_LABELED_URL = "/nextweek/NEXT_WEEK_production_final_scenes.pdf";
+export const NW_SCRIPT_LABELED_LABEL = "Script · Scene-labeled PDF";
+
 export const NW_PROJECT = {
   title: "Next Week",
   slug: "/nextweek",
