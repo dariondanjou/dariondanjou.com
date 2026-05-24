@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { NW_PROJECT, NW_SCENES, NW_SCRIPT_URL, NW_SCRIPT_LABEL } from "./NextWeek.data";
 import { useShotOverrides, STATUS } from "./NextWeek.state";
 import "./NextWeek.css";
