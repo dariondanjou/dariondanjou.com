@@ -17,8 +17,8 @@ const NW = {
   blueSoft: "rgba(168,204,222,0.40)",
   done: "#5C7A4E",
   doneSoft: "rgba(92,122,78,0.16)",
-  vfx: "#9C5B2A",
-  vfxSoft: "rgba(156,91,42,0.12)",
+  vfx: "#2F6B3B",
+  vfxSoft: "rgba(47,107,59,0.12)",
   env: "#7A3B2C",
   envSoft: "rgba(122,59,44,0.12)",
   display: '"Geist", -apple-system, system-ui, sans-serif',
@@ -307,6 +307,34 @@ function ShotCard({ shot, completed, active, onToggle, onEdit }) {
             letterSpacing: 0, fontWeight: 500,
           }}
         />
+
+        {/* Per-shot notes — production scratch pad; separate from script-derived ctx/cov */}
+        <div style={{
+          marginTop: 14, paddingTop: 12,
+          borderTop: `2px dashed ${NW.borderStrong}`,
+        }}>
+          <div style={{
+            fontFamily: NW.mono, fontSize: 9.5, fontWeight: 700,
+            color: NW.blueDeep, letterSpacing: 1.6, textTransform: "uppercase",
+            marginBottom: 6,
+            display: "flex", alignItems: "center", gap: 6,
+          }}>
+            <span style={{ width: 6, height: 6, background: NW.blue, border: `1px solid ${NW.blueDeep}` }}/>
+            Notes
+          </div>
+          <Editable
+            tag="p"
+            multiline
+            value={shot.notes || ""}
+            onChange={v => onEdit("notes", v)}
+            placeholder="Add a note for this shot…"
+            style={{
+              fontFamily: NW.ui, fontSize: 13, lineHeight: 1.45,
+              color: NW.text, margin: 0, minHeight: 18,
+              letterSpacing: 0, fontWeight: 500,
+            }}
+          />
+        </div>
       </div>
 
       {active && (
@@ -834,7 +862,7 @@ export default function NextWeek() {
   const [active, setActive] = useState(NW_ACTIVE_ID);
   const [shots, setShots] = useState(() => {
     const map = {};
-    NW_SCENES.forEach(sc => sc.shots.forEach(s => { map[s.id] = { ...s }; }));
+    NW_SCENES.forEach(sc => sc.shots.forEach(s => { map[s.id] = { ...s, notes: "" }; }));
     return map;
   });
   const [filter, setFilter] = useState("all");
