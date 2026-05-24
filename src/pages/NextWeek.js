@@ -47,6 +47,11 @@ const SHOT_IMG = (() => {
   return map;
 })();
 
+// Global sequential shot number (zero-padded to 3 digits). 1A -> "001", 11P -> "145".
+const SHOT_SEQ = Object.fromEntries(
+  FLAT_SHOTS.map((s, i) => [s.id, String(i + 1).padStart(3, "0")])
+);
+
 // ─── icons ──────────────────────────────────────────────────
 const Check = ({ s = 18, w = 2.4 }) => (
   <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={w} strokeLinecap="round" strokeLinejoin="round">
@@ -200,7 +205,12 @@ function Storyboard({ shot, completed, active, onToggle }) {
           padding: "4px 8px", borderRadius: 3, background: NW.text,
           fontFamily: NW.mono, fontSize: 11, fontWeight: 700,
           color: NW.bg, letterSpacing: 0.4,
-        }}>{code}</div>
+          display: "inline-flex", alignItems: "baseline", gap: 6,
+          fontVariantNumeric: "tabular-nums",
+        }}>
+          <span style={{ color: "rgba(236,230,216,0.55)", fontWeight: 500 }}>{SHOT_SEQ[code]}</span>
+          <span>{code}</span>
+        </div>
         <ShotCheck size={36} checked={completed} active={active} onClick={onToggle}/>
       </div>
 
