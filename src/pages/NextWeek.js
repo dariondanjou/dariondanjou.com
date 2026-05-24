@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { NW_PROJECT, NW_SCENES, NW_DEFAULT_DONE, NW_ACTIVE_ID } from "./NextWeek.data";
+import { NW_PROJECT, NW_SCENES, NW_DEFAULT_DONE, NW_ACTIVE_ID, NW_SCRIPT_URL, NW_SCRIPT_LABEL } from "./NextWeek.data";
 import "./NextWeek.css";
 
 const NW = {
@@ -423,11 +423,32 @@ function SiteNav() {
           <a href="/contact" style={{ color: "inherit", textDecoration: "none" }}>Contact</a>
         </div>
         <div style={{
-          fontFamily: NW.mono, fontSize: 10, fontWeight: 600, color: NW.textDim,
-          letterSpacing: 1, textTransform: "uppercase",
-          display: "flex", alignItems: "center", gap: 6,
+          display: "flex", alignItems: "center", gap: 14,
         }}>
-          dariondanjou.com<span style={{ color: NW.text, fontWeight: 700 }}>/nextweek</span>
+          <a
+            href={NW_SCRIPT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              padding: "5px 10px",
+              background: NW.text, color: NW.bg,
+              fontFamily: NW.mono, fontSize: 10, fontWeight: 700,
+              letterSpacing: 1.2, textTransform: "uppercase",
+              textDecoration: "none", borderRadius: 2,
+            }}
+          >
+            <span style={{ width: 6, height: 6, background: NW.blue }}/>
+            {NW_SCRIPT_LABEL}
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+          <div style={{
+            fontFamily: NW.mono, fontSize: 10, fontWeight: 600, color: NW.textDim,
+            letterSpacing: 1, textTransform: "uppercase",
+            display: "flex", alignItems: "center", gap: 6,
+          }}>
+            dariondanjou.com<span style={{ color: NW.text, fontWeight: 700 }}>/nextweek</span>
+          </div>
         </div>
       </div>
     </nav>
@@ -473,6 +494,29 @@ function Hero({ project, totalDone, totalShots, pct }) {
           }}>
             {project.logline}
           </p>
+          <a
+            href={NW_SCRIPT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 10,
+              marginTop: 24,
+              padding: "10px 16px",
+              background: NW.surface,
+              border: `2px solid ${NW.text}`,
+              boxShadow: `4px 4px 0 ${NW.text}`,
+              color: NW.text, textDecoration: "none",
+              fontFamily: NW.mono, fontSize: 12, fontWeight: 700,
+              letterSpacing: 1.4, textTransform: "uppercase",
+            }}
+          >
+            <span style={{
+              width: 10, height: 10, background: NW.blue,
+              border: `2px solid ${NW.blueDeep}`,
+            }}/>
+            Read the script &middot; Production Final
+            <span aria-hidden="true">&rarr;</span>
+          </a>
         </div>
         <aside style={{
           background: NW.text, color: NW.bg, padding: "24px 26px",
@@ -699,9 +743,25 @@ function SiteFooter({ project }) {
         </div>
         <div>
           <div style={{ fontFamily: NW.mono, fontSize: 10, fontWeight: 700, color: NW.blue, letterSpacing: 1.4, textTransform: "uppercase", marginBottom: 14 }}>Links</div>
-          {["Script (Final draft 3)", "Lookbook", "Storyboard PDF", "Schedule", "Callsheet"].map(l => (
-            <div key={l} style={{ fontFamily: NW.ui, fontSize: 13.5, fontWeight: 600, color: NW.bg, marginBottom: 5, textDecoration: "underline", textDecorationColor: NW.blue, textDecorationThickness: 2, textUnderlineOffset: 3 }}>{l}</div>
-          ))}
+          {[
+            { label: "Script · Production Final", href: NW_SCRIPT_URL },
+            { label: "Lookbook", href: null },
+            { label: "Storyboard PDF", href: null },
+            { label: "Schedule", href: null },
+            { label: "Callsheet", href: null },
+          ].map(l => {
+            const linkStyle = {
+              fontFamily: NW.ui, fontSize: 13.5, fontWeight: 600,
+              color: NW.bg, marginBottom: 5, display: "block",
+              textDecoration: "underline",
+              textDecorationColor: NW.blue, textDecorationThickness: 2, textUnderlineOffset: 3,
+            };
+            return l.href ? (
+              <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" style={linkStyle}>{l.label}</a>
+            ) : (
+              <div key={l.label} style={{ ...linkStyle, color: "rgba(236,230,216,0.5)", textDecorationColor: "rgba(236,230,216,0.2)" }}>{l.label}</div>
+            );
+          })}
         </div>
       </div>
       <div style={{ borderTop: "1px solid rgba(236,230,216,0.15)" }}>
