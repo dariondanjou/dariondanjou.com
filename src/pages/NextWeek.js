@@ -745,11 +745,17 @@ export default function NextWeek() {
   const totalDone = completed.size;
   const pct = Math.round((totalDone / totalShots) * 100);
 
-  // Set <title> + scroll to top on mount
+  // Set <title>, and tag <html> so route-scoped CSS can undo the
+  // site-wide `html, body { overflow: hidden }` and `.page-content`
+  // bottom padding. Cleaned up when navigating away.
   useEffect(() => {
     const prev = document.title;
     document.title = "Next Week · Shot List — Darion D'Anjou";
-    return () => { document.title = prev; };
+    document.documentElement.classList.add("nw-route-active");
+    return () => {
+      document.title = prev;
+      document.documentElement.classList.remove("nw-route-active");
+    };
   }, []);
 
   return (

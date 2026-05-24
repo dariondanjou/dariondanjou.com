@@ -3,15 +3,32 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap');
 
+/* On /nextweek, undo the site-wide `overflow: hidden` on html/body and
+   drop the bottom-nav padding from .page-content so the whole document
+   scrolls naturally (sticky nav + toolbar need a document scroller). */
+.nw-route-active,
+.nw-route-active body { overflow: auto !important; height: auto !important; }
+.nw-route-active .page-content { overflow: visible !important; padding-bottom: 0 !important; }
+
 .nw-page {
   --nw-bg: #ECE6D8;
   --nw-shell-pad: 28px;
   background: var(--nw-bg);
   color: #0F0E0C;
-  font-family: 'Geist', -apple-system, system-ui, sans-serif;
+  font-family: 'Geist', -apple-system, system-ui, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
+}
+/* Beat the site-wide `* { font-family: 'Roboto Mono' !important }` rule.
+   Default everything on the page to Geist; preserve mono on elements
+   whose inline style explicitly asks for it (attribute selector matches
+   the "Geist Mono" substring in their style="..." attribute). */
+.nw-page, .nw-page * {
+  font-family: 'Geist', -apple-system, system-ui, sans-serif !important;
+}
+.nw-page [style*="Geist Mono"] {
+  font-family: 'Geist Mono', 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace !important;
 }
 .nw-page * { box-sizing: border-box; }
 .nw-page ::selection { background: #1F4A6E; color: #ECE6D8; }
